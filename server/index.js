@@ -12,6 +12,12 @@ const port = 3001
 
 io.on("connection", (socket) => {
   console.log("✅ server connected")
+
+  socket.on("new_room", (formState) => {
+    console.log(formState)
+    console.log(socket)
+  })
+
   socket.on("disconnect", () => {
     console.log("❌ server disconnected")
   })
