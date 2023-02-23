@@ -11,15 +11,29 @@ import {
   NumberInputStepper,
 } from '@chakra-ui/react'
 import React, { FormEvent, useState } from 'react'
-import { io } from 'socket.io-client'
-const socket = io('localhost:3001')
+import { useNavigate } from 'react-router-dom'
+import { Socket } from 'socket.io-client'
+import { socket } from '../store/socket'
+// import { io } from 'socket.io-client'
+// const socket = io('localhost:3001/')
+import { useSocketStore } from '../store/store'
+
 interface FormState {
   name: string
   password: string
   people: number
 }
 
+type roomInfo = {
+  name: string
+  password: string
+  people: number
+  id: string
+}
+
 export default function MakeNewRoom() {
+  // const socket = useSocketStore((state) => state)
+  const navigate = useNavigate()
   const [formState, setFormState] = useState<FormState>({
     name: '',
     password: '',
@@ -35,9 +49,18 @@ export default function MakeNewRoom() {
 
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault()
-    console.log('Form data:', formState)
-    // Do something with the form data
-    socket.emit('new_room', formState)
+    socket.emit('new_room', formState, (roomInfo: roomInfo) => {
+      if (roomInfo) {
+        console.log('OK')
+
+        // 대기실에 방 추가하기 로직
+
+        // 방입장
+        navigate(`/room/${roomInfo.id}`, { state: roomInfo })
+      } else {
+        console.log('FAIL')
+      }
+    })
   }
 
   return (
