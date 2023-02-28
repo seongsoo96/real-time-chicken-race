@@ -12,11 +12,9 @@ import {
 } from '@chakra-ui/react'
 import React, { FormEvent, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { Socket } from 'socket.io-client'
 import { socket } from '../store/socket'
-// import { io } from 'socket.io-client'
-// const socket = io('localhost:3001/')
-import { useSocketStore } from '../store/store'
+import { RoomInfo } from '../../interface'
+import { useRoomListStore } from '../store/store'
 
 interface FormState {
   name: string
@@ -24,15 +22,9 @@ interface FormState {
   people: number
 }
 
-type roomInfo = {
-  name: string
-  password: string
-  people: number
-  id: string
-}
-
 export default function MakeNewRoom() {
-  // const socket = useSocketStore((state) => state)
+  const { roomList, addRoom, removeRoom, updateRoom } = useRoomListStore()
+
   const navigate = useNavigate()
   const [formState, setFormState] = useState<FormState>({
     name: '',
@@ -49,11 +41,13 @@ export default function MakeNewRoom() {
 
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault()
-    socket.emit('new_room', formState, (roomInfo: roomInfo) => {
+    socket.emit('new_room', formState, (roomInfo: RoomInfo) => {
       if (roomInfo) {
         console.log('OK')
 
         // 대기실에 방 추가하기 로직
+        addRoom(roomInfo)
+        socket.emit('room_list', roomList)
 
         // 방입장
         navigate(`/room/${roomInfo.id}`, { state: roomInfo })

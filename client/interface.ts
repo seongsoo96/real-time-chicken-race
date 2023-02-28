@@ -21,3 +21,10 @@ export interface SocketData {
 export interface GlobalLayoutProps {
   children: ReactNode
 }
+
+export interface RoomInfo {
+  name: string
+  password: string
+  people: number
+  id: string
+}

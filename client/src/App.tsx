@@ -5,8 +5,6 @@ import { createBrowserRouter, RouterProvider } from 'react-router-dom'
 import GlobalLayout from './components/GlobalLayout'
 import MakeNewRoom from './components/MakeNewRoom'
 import Room from './components/Room'
-import { io, Socket } from 'socket.io-client'
-const socket: Socket = io('localhost:3001/')
 
 const router = createBrowserRouter([
   {

@@ -44,9 +44,9 @@ io.on("connection", (socket) => {
     socket.emit("room_enter", room)
     io.to(formState.name).emit("message", `${socket.id} 님이 입장하셨습니다.`)
   })
-  socket.on("disconnect", () => {
-    console.log("❌ server disconnected")
-  })
+  // socket.on("disconnect", () => {
+  //   console.log("❌ server disconnected")
+  // })
 })
 
 server.listen(port, function () {
