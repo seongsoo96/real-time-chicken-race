@@ -24,7 +24,6 @@ interface FormState {
 
 export default function MakeNewRoom() {
   const { roomList, addRoom, removeRoom, updateRoom } = useRoomListStore()
-
   const navigate = useNavigate()
   const [formState, setFormState] = useState<FormState>({
     name: '',
@@ -41,20 +40,22 @@ export default function MakeNewRoom() {
 
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault()
-    socket.emit('new_room', formState, (roomInfo: RoomInfo) => {
-      if (roomInfo) {
-        console.log('OK')
+    socket.emit('room_new', formState)
 
-        // 대기실에 방 추가하기 로직
-        addRoom(roomInfo)
-        socket.emit('room_list', roomList)
+    // socket.emit('new_room', formState, (roomInfo: RoomInfo) => {
+    //   if (roomInfo) {
+    //     console.log('OK')
 
-        // 방입장
-        navigate(`/room/${roomInfo.id}`, { state: roomInfo })
-      } else {
-        console.log('FAIL')
-      }
-    })
+    //     // 대기실에 방 추가하기 로직
+    //     // addRoom(roomInfo)
+    //     socket.emit('room_list', roomList)
+
+    //     // 방입장
+    //     navigate(`/room/${roomInfo.id}`, { state: roomInfo })
+    //   } else {
+    //     console.log('FAIL')
+    //   }
+    // })
   }
 
   return (
