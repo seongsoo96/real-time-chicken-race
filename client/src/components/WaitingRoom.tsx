@@ -1,4 +1,14 @@
-import { Box, Button } from '@chakra-ui/react'
+import {
+  Box,
+  Flex,
+  Heading,
+  Spinner,
+  VStack,
+  Text,
+  Spacer,
+  ButtonGroup,
+  Button,
+} from '@chakra-ui/react'
 import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { RoomInfo } from '../../interface'
@@ -19,6 +29,7 @@ export default function WaitingRoom() {
 
   useEffect(() => {
     socket.on('room_list', (list) => {
+      console.log('waitingRoom room_list.on list ::::')
       console.log(list)
       setRoomList(list)
     })
@@ -31,7 +42,76 @@ export default function WaitingRoom() {
 
   return (
     <>
-      <h1>Dino</h1>
+      <Box
+        p="4"
+        bg="gray.50"
+        minH="100vh"
+        display="flex"
+        alignItems="center"
+        justifyContent="center"
+      >
+        <Box
+          maxW="md"
+          bg="white"
+          p="6"
+          borderRadius="md"
+          boxShadow="md"
+          textAlign="center"
+        >
+          <Box p="2">
+            <Heading size="md">Dino</Heading>
+          </Box>
+          <hr />
+          <VStack spacing="4" align="stretch">
+            <Button onClick={makeNewRoom} colorScheme="blue" mt="4">
+              방만들기
+            </Button>
+            {roomList.map((room, idx) => (
+              <>
+                {/* <Button colorScheme="blue" variant="outline"> */}
+                <Flex
+                  key={idx}
+                  minWidth="max-content"
+                  alignItems="center"
+                  justify="space-between"
+                  gap="2"
+                >
+                  <Box p="2" w="70%">
+                    <Heading size="md">{room.name}</Heading>
+                  </Box>
+                  <Box p="2">
+                    <Heading size="md">0 / {room.people}</Heading>
+                  </Box>
+                </Flex>
+                {/* </Button> */}
+                <Flex minWidth="max-content" alignItems="center" gap="2">
+                  <Box p="2">
+                    <Heading size="md">Chakra App</Heading>
+                  </Box>
+                  <Spacer />
+                  <ButtonGroup gap="2">
+                    <Button colorScheme="teal">Sign Up</Button>
+                    <Button colorScheme="teal">Log in</Button>
+                  </ButtonGroup>
+                </Flex>
+              </>
+            ))}
+          </VStack>
+        </Box>
+      </Box>
+
+      <Flex minWidth="max-content" alignItems="center" gap="2">
+        <Box p="2">
+          <Heading size="md">Chakra App</Heading>
+        </Box>
+        <Spacer />
+        <ButtonGroup gap="2">
+          <Button colorScheme="teal">Sign Up</Button>
+          <Button colorScheme="teal">Log in</Button>
+        </ButtonGroup>
+      </Flex>
+
+      {/* <h1>Dino</h1>
       <Button onClick={makeNewRoom} colorScheme="blue">
         방만들기
       </Button>
@@ -40,11 +120,19 @@ export default function WaitingRoom() {
       <ul>
         {roomList?.map((room, idx) => (
           <>
-            <li key={idx}>{room.name}</li>
-            <li key={idx}>{room.people}</li>
+            <li key={idx}>
+              <Flex minWidth="max-content" alignItems="center" gap="2">
+                <Box p="2">
+                  <Heading size="md">{room.name}</Heading>
+                </Box>
+                <Box p="2">
+                  <Heading size="md">0 / {room.people}</Heading>
+                </Box>
+              </Flex>
+            </li>
           </>
         ))}
-      </ul>
+      </ul> */}
     </>
   )
 }
