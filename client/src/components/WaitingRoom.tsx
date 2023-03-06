@@ -51,7 +51,7 @@ export default function WaitingRoom() {
         justifyContent="center"
       >
         <Box
-          maxW="md"
+          w="md"
           bg="white"
           p="6"
           borderRadius="md"
@@ -67,40 +67,28 @@ export default function WaitingRoom() {
               방만들기
             </Button>
             {roomList.map((room, idx) => (
-              <>
-                {/* <Button colorScheme="blue" variant="outline"> */}
-                <Flex
-                  key={idx}
-                  minWidth="max-content"
-                  alignItems="center"
-                  justify="space-between"
-                  gap="2"
-                >
-                  <Box p="2" w="70%">
-                    <Heading size="md">{room.name}</Heading>
-                  </Box>
-                  <Box p="2">
-                    <Heading size="md">0 / {room.people}</Heading>
-                  </Box>
-                </Flex>
-                {/* </Button> */}
-                <Flex minWidth="max-content" alignItems="center" gap="2">
-                  <Box p="2">
-                    <Heading size="md">Chakra App</Heading>
-                  </Box>
-                  <Spacer />
-                  <ButtonGroup gap="2">
-                    <Button colorScheme="teal">Sign Up</Button>
-                    <Button colorScheme="teal">Log in</Button>
-                  </ButtonGroup>
-                </Flex>
-              </>
+              <Button
+                key={idx}
+                minWidth="max-content"
+                alignItems="center"
+                gap="2"
+              >
+                <Box p="2" w="70%">
+                  <Heading size="md" textAlign="left">
+                    {room.name}
+                  </Heading>
+                </Box>
+                <Box w="1px" h="100%" bgColor="blackAlpha.300" />
+                <Box p="2">
+                  <Heading size="md">0 / {room.people}</Heading>
+                </Box>
+              </Button>
             ))}
           </VStack>
         </Box>
       </Box>
 
-      <Flex minWidth="max-content" alignItems="center" gap="2">
+      {/* <Flex minWidth="max-content" alignItems="center" gap="2">
         <Box p="2">
           <Heading size="md">Chakra App</Heading>
         </Box>
@@ -109,7 +97,7 @@ export default function WaitingRoom() {
           <Button colorScheme="teal">Sign Up</Button>
           <Button colorScheme="teal">Log in</Button>
         </ButtonGroup>
-      </Flex>
+      </Flex> */}
 
       {/* <h1>Dino</h1>
       <Button onClick={makeNewRoom} colorScheme="blue">

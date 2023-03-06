@@ -41,6 +41,7 @@ export default function MakeNewRoom() {
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault()
     socket.emit('room_new', formState)
+    navigate(`/room/${formState.name}`)
 
     // socket.emit('new_room', formState, (roomInfo: RoomInfo) => {
     //   if (roomInfo) {
@@ -91,10 +92,10 @@ export default function MakeNewRoom() {
                 value={formState.people}
                 onChange={handleInputChange}
               />
-              <NumberInputStepper>
+              {/* <NumberInputStepper>
                 <NumberIncrementStepper />
                 <NumberDecrementStepper />
-              </NumberInputStepper>
+              </NumberInputStepper> */}
             </NumberInput>
           </FormControl>
 
