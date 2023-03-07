@@ -8,24 +8,24 @@ interface RoomListState {
   updateRoom: (id: string, updatedRoom: RoomInfo) => void
 }
 
-export const useRoomListStore = create<RoomListState>((set) => ({
-  roomList: [],
+// export const useRoomListStore = create<RoomListState>((set) => ({
+//   roomList: [],
 
-  addRoom: (room) => {
-    set((state) => ({ roomList: [...state.roomList, room] }))
-  },
+//   addRoom: (room) => {
+//     set((state) => ({ roomList: [...state.roomList, room] }))
+//   },
 
-  removeRoom: (id) => {
-    set((state) => ({
-      roomList: state.roomList.filter((room) => room.id !== id),
-    }))
-  },
+//   removeRoom: (id) => {
+//     set((state) => ({
+//       roomList: state.roomList.filter((room) => room.id !== id),
+//     }))
+//   },
 
-  updateRoom: (id, updatedRoom) => {
-    set((state) => ({
-      roomList: state.roomList.map((room) =>
-        room.id === id ? { ...updatedRoom } : room,
-      ),
-    }))
-  },
-}))
+//   updateRoom: (id, updatedRoom) => {
+//     set((state) => ({
+//       roomList: state.roomList.map((room) =>
+//         room.id === id ? { ...updatedRoom } : room,
+//       ),
+//     }))
+//   },
+// }))

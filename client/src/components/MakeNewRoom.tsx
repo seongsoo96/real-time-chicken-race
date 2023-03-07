@@ -14,7 +14,7 @@ import React, { FormEvent, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { socket } from '../store/socket'
 import { RoomInfo } from '../../interface'
-import { useRoomListStore } from '../store/store'
+// import { useRoomListStore } from '../store/store'
 
 interface FormState {
   name: string
@@ -23,7 +23,7 @@ interface FormState {
 }
 
 export default function MakeNewRoom() {
-  const { roomList, addRoom, removeRoom, updateRoom } = useRoomListStore()
+  // const { roomList, addRoom, removeRoom, updateRoom } = useRoomListStore()
   const navigate = useNavigate()
   const [formState, setFormState] = useState<FormState>({
     name: '',

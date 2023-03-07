@@ -8,12 +8,22 @@ import {
   Spacer,
   ButtonGroup,
   Button,
+  ModalContent,
+  Modal,
+  ModalBody,
+  ModalCloseButton,
+  ModalFooter,
+  ModalHeader,
+  ModalOverlay,
+  useDisclosure,
+  Input,
+  InputProps,
 } from '@chakra-ui/react'
 import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { RoomInfo } from '../../interface'
 import { socket } from '../store/socket'
-import { useRoomListStore } from '../store/store'
+// import { useRoomListStore } from '../store/store'
 type roomInfo = {
   name: String
   password: String
@@ -21,10 +31,25 @@ type roomInfo = {
 }
 
 export default function WaitingRoom() {
+  const { isOpen, onOpen, onClose } = useDisclosure()
+  const [inputPassword, setInputPassword] = useState('')
   const [roomList, setRoomList] = useState<roomInfo[]>([])
   const navigate = useNavigate()
   const makeNewRoom = () => {
     navigate('/makeNewRoom')
+  }
+
+  const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    console.log(event.target.value)
+    setInputPassword(event.target.value)
+  }
+  const checkPassword = () => {}
+
+  const openPwCheckPopup = () => {}
+
+  const enterRoom = (room: roomInfo) => {
+    console.log(room)
+    socket.emit('enter_room', room)
   }
 
   useEffect(() => {
@@ -72,6 +97,7 @@ export default function WaitingRoom() {
                 minWidth="max-content"
                 alignItems="center"
                 gap="2"
+                onClick={() => openPwCheckPopup()}
               >
                 <Box p="2" w="70%">
                   <Heading size="md" textAlign="left">
@@ -86,6 +112,31 @@ export default function WaitingRoom() {
             ))}
           </VStack>
         </Box>
+        <Modal isOpen={isOpen} onClose={onClose}>
+          <ModalOverlay />
+          <ModalContent>
+            <ModalHeader>비밀번호 입력 ㄱㄱ</ModalHeader>
+            <ModalCloseButton />
+            <ModalBody>
+              <Input
+                type="text"
+                name="password"
+                value={inputPassword}
+                onChange={handleInputChange}
+                placeholder="비번 입력 ㄱㄱ"
+              />
+            </ModalBody>
+
+            <ModalFooter>
+              <Button colorScheme="blue" mr={3} onClick={onClose}>
+                Close
+              </Button>
+              <Button variant="ghost" onClick={checkPassword}>
+                확인
+              </Button>
+            </ModalFooter>
+          </ModalContent>
+        </Modal>
       </Box>
 
       {/* <Flex minWidth="max-content" alignItems="center" gap="2">

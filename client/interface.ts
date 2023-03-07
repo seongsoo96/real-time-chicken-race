@@ -26,5 +26,5 @@ export interface RoomInfo {
   name: string
   password: string
   people: number
-  id: string
+  // id: string
 }
