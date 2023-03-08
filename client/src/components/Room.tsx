@@ -12,12 +12,12 @@ export default function Room() {
   })
   useEffect(() => {
     socket.on('room_enter', (room) => {
-      console.log(`Enter room ${room.name}`)
-      console.log('room :::')
-      console.log(room)
+      console.log(`${socket.id}가 방 '${room.name}'에 입장했습니다.`)
+      console.log(socket)
       setRoomInfo({ ...room })
-      console.log('roomInfo :::')
-      console.log(roomInfo)
+    })
+    socket.on('people_list', (list) => {
+      console.log('people_list ::: ', list)
     })
   }, [])
 

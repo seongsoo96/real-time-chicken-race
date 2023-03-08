@@ -18,22 +18,33 @@ import {
   useDisclosure,
   Input,
   InputProps,
+  Alert,
+  AlertDescription,
+  AlertIcon,
+  AlertTitle,
 } from '@chakra-ui/react'
 import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { RoomInfo } from '../../interface'
 import { socket } from '../store/socket'
 // import { useRoomListStore } from '../store/store'
-type roomInfo = {
-  name: String
-  password: String
+interface RoomInfo {
+  name: string
+  password: string
   people: number
+}
+
+const defaultRoomInfo: RoomInfo = {
+  name: '',
+  password: '',
+  people: 0,
 }
 
 export default function WaitingRoom() {
   const { isOpen, onOpen, onClose } = useDisclosure()
   const [inputPassword, setInputPassword] = useState('')
-  const [roomList, setRoomList] = useState<roomInfo[]>([])
+  const [roomList, setRoomList] = useState<RoomInfo[]>([])
+  const [room, setRoom] = useState<RoomInfo>(defaultRoomInfo)
+  const [pwCorrect, setPwCorrect] = useState(true)
   const navigate = useNavigate()
   const makeNewRoom = () => {
     navigate('/makeNewRoom')
@@ -43,13 +54,24 @@ export default function WaitingRoom() {
     console.log(event.target.value)
     setInputPassword(event.target.value)
   }
-  const checkPassword = () => {}
+  const checkPassword = () => {
+    if (inputPassword === room.password) {
+      enterRoom()
+    } else {
+      setPwCorrect(false)
+      onClose()
+    }
+  }
 
-  const openPwCheckPopup = () => {}
-
-  const enterRoom = (room: roomInfo) => {
+  const openPwCheckPopup = (room: RoomInfo) => {
     console.log(room)
-    socket.emit('enter_room', room)
+    setRoom(room)
+    onOpen()
+  }
+
+  const enterRoom = () => {
+    socket.emit('room_enter', room)
+    navigate(`/room/${room.name}`)
   }
 
   useEffect(() => {
@@ -67,6 +89,15 @@ export default function WaitingRoom() {
 
   return (
     <>
+      {!pwCorrect ? (
+        <Alert status="error">
+          <AlertIcon />
+          <AlertTitle>비번 틀림 ㅋㅋ</AlertTitle>
+          <AlertDescription>
+            Your Chakra experience may be degraded.
+          </AlertDescription>
+        </Alert>
+      ) : null}
       <Box
         p="4"
         bg="gray.50"
@@ -97,7 +128,7 @@ export default function WaitingRoom() {
                 minWidth="max-content"
                 alignItems="center"
                 gap="2"
-                onClick={() => openPwCheckPopup()}
+                onClick={() => openPwCheckPopup(room)}
               >
                 <Box p="2" w="70%">
                   <Heading size="md" textAlign="left">

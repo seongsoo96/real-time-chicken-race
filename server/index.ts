@@ -33,6 +33,11 @@ function enterRoom(socket, name) {
 
   socket.join(name)
   socket.emit("room_enter", room)
+  console.log("rooms ::::: ")
+  console.log(io.sockets.adapter.rooms.get(name))
+  // const peopleList = Array.from(io.sockets.adapter.rooms.get(name).values())
+  const peopleList = [...io.sockets.adapter.rooms.get(name)]
+  io.to(name).emit("people_list", peopleList)
   io.to(name).emit("message", `${socket.id} 님이 입장하셨습니다.`)
 }
 
@@ -84,6 +89,17 @@ io.on("connection", (socket) => {
     enterRoom(socket, name)
   })
 
+  //기존 방 참가
+  socket.on("room_enter", (room) => {
+    if (socket.rooms.size > 1) {
+      console.log(`socket ${socket.id} is already in room.`)
+      console.log(socket.rooms)
+      socket.emit("error", "이미 다른 방에 참가중입니다.")
+      return
+    }
+
+    enterRoom(socket, room.name)
+  })
   // console.log("socket ::::::")
   // socket.join("room1")
   // console.log(socket)
