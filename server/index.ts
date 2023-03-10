@@ -47,6 +47,7 @@ function getRoom(name) {
 
 const port = 3001
 let roomList = []
+const roomData = {}
 io.on("connection", (socket) => {
   socket.onAny((event) => {
     console.log(`Socket event: ${event}`)
@@ -61,6 +62,11 @@ io.on("connection", (socket) => {
   socket.on("room_new", (formState) => {
     const name = formState.name
     console.log(`Socket ${socket.id} is creating room ${name}.`)
+
+    // 방 데이터 초기화(방마다 플레이어 데이터 넣을거임)
+    if (!roomData[name]) {
+      roomData[name] = []
+    }
 
     //Socket은 ID와 같은 Room을 Default로 갖고 있음
     if (socket.rooms.size > 1) {
@@ -99,6 +105,13 @@ io.on("connection", (socket) => {
     }
 
     enterRoom(socket, room.name)
+  })
+
+  socket.on("nick_name", (obj) => {
+    const { id, nickName, roomName } = obj
+    roomData[roomName] = [...roomData[roomName], { id, nickName }]
+    // io.to(roomName).emit("player_list", roomData[roomName])
+    socket.emit("player_list", roomData[roomName])
   })
   // console.log("socket ::::::")
   // socket.join("room1")

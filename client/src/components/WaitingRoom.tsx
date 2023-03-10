@@ -26,6 +26,7 @@ import {
 import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { socket } from '../store/socket'
+import Popup from './Popup'
 // import { useRoomListStore } from '../store/store'
 interface RoomInfo {
   name: string
@@ -41,6 +42,7 @@ const defaultRoomInfo: RoomInfo = {
 
 export default function WaitingRoom() {
   const { isOpen, onOpen, onClose } = useDisclosure()
+  const [openPopup, setOpenPopup] = useState(false)
   const [inputPassword, setInputPassword] = useState('')
   const [roomList, setRoomList] = useState<RoomInfo[]>([])
   const [room, setRoom] = useState<RoomInfo>(defaultRoomInfo)
@@ -54,19 +56,19 @@ export default function WaitingRoom() {
     console.log(event.target.value)
     setInputPassword(event.target.value)
   }
-  const checkPassword = () => {
-    if (inputPassword === room.password) {
+  const checkPassword = (password: string) => {
+    if (password === room.password) {
       enterRoom()
     } else {
       setPwCorrect(false)
-      onClose()
+      setOpenPopup(false)
     }
   }
 
   const openPwCheckPopup = (room: RoomInfo) => {
     console.log(room)
     setRoom(room)
-    onOpen()
+    setOpenPopup(true)
   }
 
   const enterRoom = () => {
@@ -143,7 +145,13 @@ export default function WaitingRoom() {
             ))}
           </VStack>
         </Box>
-        <Modal isOpen={isOpen} onClose={onClose}>
+        <Popup
+          open={openPopup}
+          type="password"
+          title="비밀번호"
+          func={checkPassword}
+        />
+        {/* <Modal isOpen={isOpen} onClose={onClose}>
           <ModalOverlay />
           <ModalContent>
             <ModalHeader>비밀번호 입력 ㄱㄱ</ModalHeader>
@@ -167,7 +175,7 @@ export default function WaitingRoom() {
               </Button>
             </ModalFooter>
           </ModalContent>
-        </Modal>
+        </Modal> */}
       </Box>
 
       {/* <Flex minWidth="max-content" alignItems="center" gap="2">
