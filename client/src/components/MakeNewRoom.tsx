@@ -1,4 +1,8 @@
 import {
+  Alert,
+  AlertDescription,
+  AlertIcon,
+  AlertTitle,
   Box,
   Button,
   FormControl,
@@ -10,10 +14,11 @@ import {
   NumberInputField,
   NumberInputStepper,
 } from '@chakra-ui/react'
-import React, { FormEvent, useState } from 'react'
+import React, { FormEvent, useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { socket } from '../store/socket'
 import { RoomInfo } from '../../interface'
+import Popup from './Popup'
 // import { useRoomListStore } from '../store/store'
 
 interface FormState {
@@ -25,6 +30,8 @@ interface FormState {
 export default function MakeNewRoom() {
   // const { roomList, addRoom, removeRoom, updateRoom } = useRoomListStore()
   const navigate = useNavigate()
+  const [errorMessage, setErrorMessage] = useState('')
+  const [openPopup, setOpenPopup] = useState(false)
   const [formState, setFormState] = useState<FormState>({
     name: '',
     password: '',
@@ -38,29 +45,46 @@ export default function MakeNewRoom() {
     setFormState((prevState) => ({ ...prevState, [name]: value }))
   }
 
+  // const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
+  //   event.preventDefault()
+  //   socket.emit('room_new', formState)
+  // }
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault()
-    socket.emit('room_new', formState)
-    navigate(`/room/${formState.name}`)
-
-    // socket.emit('new_room', formState, (roomInfo: RoomInfo) => {
-    //   if (roomInfo) {
-    //     console.log('OK')
-
-    //     // 대기실에 방 추가하기 로직
-    //     // addRoom(roomInfo)
-    //     socket.emit('room_list', roomList)
-
-    //     // 방입장
-    //     navigate(`/room/${roomInfo.id}`, { state: roomInfo })
-    //   } else {
-    //     console.log('FAIL')
-    //   }
-    // })
+    // socket.emit('room_new', formState)
+    setOpenPopup(true)
   }
 
+  const handleNickNameSetting = (nick: string) => {
+    socket.emit('nick_name', {
+      id: socket.id,
+      nickName: nick,
+      ...formState,
+    })
+  }
+
+  useEffect(() => {
+    socket.on('error', (message) => {
+      setErrorMessage(message)
+    })
+  }, [errorMessage])
+
+  useEffect(() => {
+    socket.on('navigate', (name) => {
+      navigate(`/room/${name}`)
+    })
+  }, [])
   return (
     <>
+      {errorMessage ? (
+        <Alert status="error">
+          <AlertIcon />
+          <AlertTitle>방 이름 중복임.</AlertTitle>
+          <AlertDescription>
+            Your Chakra experience may be degraded.
+          </AlertDescription>
+        </Alert>
+      ) : null}
       <h1>Dino</h1>
       <Box>
         <form onSubmit={handleSubmit}>
@@ -104,6 +128,12 @@ export default function MakeNewRoom() {
           </Button>
         </form>
       </Box>
+      <Popup
+        type="nickname"
+        title="닉네임"
+        open={openPopup}
+        func={handleNickNameSetting}
+      />
     </>
   )
 }

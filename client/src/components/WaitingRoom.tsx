@@ -30,13 +30,11 @@ import Popup from './Popup'
 // import { useRoomListStore } from '../store/store'
 interface RoomInfo {
   name: string
-  password: string
   people: number
 }
 
 const defaultRoomInfo: RoomInfo = {
   name: '',
-  password: '',
   people: 0,
 }
 
@@ -52,21 +50,11 @@ export default function WaitingRoom() {
     navigate('/makeNewRoom')
   }
 
-  const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    console.log(event.target.value)
-    setInputPassword(event.target.value)
-  }
   const checkPassword = (password: string) => {
-    if (password === room.password) {
-      enterRoom()
-    } else {
-      setPwCorrect(false)
-      setOpenPopup(false)
-    }
+    socket.emit('pw_check', { ...room, password })
   }
 
   const openPwCheckPopup = (room: RoomInfo) => {
-    console.log(room)
     setRoom(room)
     setOpenPopup(true)
   }
@@ -78,8 +66,7 @@ export default function WaitingRoom() {
 
   useEffect(() => {
     socket.on('room_list', (list) => {
-      console.log('waitingRoom room_list.on list ::::')
-      console.log(list)
+      console.log('waitingRoom room_list.on list ::::', list)
       setRoomList(list)
     })
     socket.emit('room_list')
@@ -88,6 +75,18 @@ export default function WaitingRoom() {
       socket.off('room_list')
     }
   }, [])
+
+  useEffect(() => {
+    socket.on('pw_check_ok', (ok) => {
+      if (ok) {
+        console.log('okokokok ::: ', room)
+        enterRoom()
+      } else {
+        setPwCorrect(false)
+        setOpenPopup(false)
+      }
+    })
+  }, [room])
 
   return (
     <>
@@ -151,66 +150,7 @@ export default function WaitingRoom() {
           title="비밀번호"
           func={checkPassword}
         />
-        {/* <Modal isOpen={isOpen} onClose={onClose}>
-          <ModalOverlay />
-          <ModalContent>
-            <ModalHeader>비밀번호 입력 ㄱㄱ</ModalHeader>
-            <ModalCloseButton />
-            <ModalBody>
-              <Input
-                type="text"
-                name="password"
-                value={inputPassword}
-                onChange={handleInputChange}
-                placeholder="비번 입력 ㄱㄱ"
-              />
-            </ModalBody>
-
-            <ModalFooter>
-              <Button colorScheme="blue" mr={3} onClick={onClose}>
-                Close
-              </Button>
-              <Button variant="ghost" onClick={checkPassword}>
-                확인
-              </Button>
-            </ModalFooter>
-          </ModalContent>
-        </Modal> */}
       </Box>
-
-      {/* <Flex minWidth="max-content" alignItems="center" gap="2">
-        <Box p="2">
-          <Heading size="md">Chakra App</Heading>
-        </Box>
-        <Spacer />
-        <ButtonGroup gap="2">
-          <Button colorScheme="teal">Sign Up</Button>
-          <Button colorScheme="teal">Log in</Button>
-        </ButtonGroup>
-      </Flex> */}
-
-      {/* <h1>Dino</h1>
-      <Button onClick={makeNewRoom} colorScheme="blue">
-        방만들기
-      </Button>
-      <hr />
-      <h1>방 목록</h1>
-      <ul>
-        {roomList?.map((room, idx) => (
-          <>
-            <li key={idx}>
-              <Flex minWidth="max-content" alignItems="center" gap="2">
-                <Box p="2">
-                  <Heading size="md">{room.name}</Heading>
-                </Box>
-                <Box p="2">
-                  <Heading size="md">0 / {room.people}</Heading>
-                </Box>
-              </Flex>
-            </li>
-          </>
-        ))}
-      </ul> */}
     </>
   )
 }

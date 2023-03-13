@@ -30,7 +30,14 @@ function enterRoom(socket, name) {
     socket.emit("error", "정상적인 방이 아닙니다.")
     return
   }
+  // 방 - [{}]
+  const player = playerList.filter((player) => player.id === socket.id)[0]
+  if (roomData[name]) {
+    roomData[name] = [...roomData[name], ...player]
+  }
+  io.to(name).emit("player_list", roomData[name])
 
+  socket.emit("navigate", name)
   socket.join(name)
   socket.emit("room_enter", room)
   console.log("rooms ::::: ")
@@ -47,6 +54,8 @@ function getRoom(name) {
 
 const port = 3001
 let roomList = []
+let roomListWithPw = []
+let playerList = []
 const roomData = {}
 io.on("connection", (socket) => {
   socket.onAny((event) => {
@@ -83,13 +92,15 @@ io.on("connection", (socket) => {
       return
     }
 
+    console.log("-----------------------")
     const roomInfo = {
       name: formState.name,
-      password: formState.password,
       people: formState.people,
     }
 
     roomList.push(roomInfo)
+    roomListWithPw.push({ ...roomInfo, password: formState.password })
+    console.log(roomListWithPw)
     io.sockets.emit("room_list", roomList)
 
     enterRoom(socket, name)
@@ -107,54 +118,31 @@ io.on("connection", (socket) => {
     enterRoom(socket, room.name)
   })
 
+  // socket.on("nick_name", (obj) => {
+  //   const { id, nickName, roomName } = obj
+  //   if (roomData[roomName]) {
+  //     roomData[roomName] = [...roomData[roomName], { id, nickName }]
+  //   }
+  //   io.to(roomName).emit("player_list", roomData[roomName])
+  // })
+
   socket.on("nick_name", (obj) => {
-    const { id, nickName, roomName } = obj
-    roomData[roomName] = [...roomData[roomName], { id, nickName }]
-    // io.to(roomName).emit("player_list", roomData[roomName])
-    socket.emit("player_list", roomData[roomName])
+    //방 만들때
+    const { id, nickName, name, password, people } = obj
+    playerList.push({ id, nickName })
+    enterRoom(socket, name)
+    //방에 입장할때
   })
-  // console.log("socket ::::::")
-  // socket.join("room1")
-  // console.log(socket)
-  // // 방 목록 반환
-  // socket.on("room_list", (roomList) => {
-  //   console.log("3")
-  //   if (roomList.length) {
-  //     socket.join("room1")
-  //     socket.emit("room_list", roomList)
-  //   } else {
-  //     console.log("4")
-  //     socket.emit("room_list", [])
-  //   }
-  // })
 
-  // console.log("5")
-  // // 방목록 io.sockets.adapter.rooms
-  // // 방 유니크 키 io.sockets.adapter.sids
-  // socket.on("new_room", (formState, cb) => {
-  //   socket.emit("")
-  //   console.log("6")
-
-  //   const roomInfo = {
-  //     name: formState.name,
-  //     password: formState.password,
-  //     people: formState.people,
-  //     id: socket.id,
-  //   }
-  //   cb(roomInfo)
-  //   roomList.push(roomInfo)
-  //   io.sockets.emit("room_list", roomList)
-
-  //   // 방 입장
-  //   const room = roomList.find((room) => room.name == formState.name)
-
-  //   socket.join(formState.name)
-  //   socket.emit("room_enter", room)
-  //   io.to(formState.name).emit("message", `${socket.id} 님이 입장하셨습니다.`)
-  // })
-  // // socket.on("disconnect", () => {
-  // //   console.log("❌ server disconnected")
-  // // })
+  // 방입장이 패스워드 체크
+  socket.on("pw_check", (room) => {
+    console.log("pw_check roomListWithPw :::::")
+    console.log(roomListWithPw.filter((r) => r.name === room.name)[0])
+    let currRoom = roomListWithPw.filter((r) => r.name === room.name)[0]
+    if (currRoom) {
+      socket.emit("pw_check_ok", currRoom.password === room.password)
+    }
+  })
 })
 
 server.listen(port, function () {

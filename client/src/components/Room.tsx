@@ -75,9 +75,9 @@ export default function Room() {
           borderBottomColor="gray.300"
           p="2"
         >
-          <Text fontWeight="bold">내 ID: {myInfo.nickName}</Text>
+          <Text fontWeight="bold">내 닉넴: {myInfo.nickName}</Text>
           <Text color="gray.500" fontSize="sm">
-            내 NickName: {myInfo.id}
+            내 ID: {myInfo.id}
           </Text>
         </ListItem>
       </UnorderedList>
