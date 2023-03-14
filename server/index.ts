@@ -25,15 +25,25 @@ function checkDuplicateRoomName(name) {
 function enterRoom(socket, name) {
   const room = getRoom(name)
   console.log(`Socket ${socket.id} is entering room ${name}.`)
-
+  console.log("room::: ", room)
   if (room === undefined) {
     socket.emit("error", "정상적인 방이 아닙니다.")
     return
   }
-  // 방 - [{}]
+  // roomData -  {
+  //               '방1': [
+  //                       {id: '1socket.id', nickName: '닉넴1'}
+  //                       {id: '2socket.id', nickName: '닉넴2'}
+  //                     ]
+  //               '방2': [
+  //                       {id: '3socket.id', nickName: '닉넴3'}
+  //                       {id: '4socket.id', nickName: '닉넴4'}
+  //                     ]
+  //             }
+
   const player = playerList.filter((player) => player.id === socket.id)[0]
   if (roomData[name]) {
-    roomData[name] = [...roomData[name], ...player]
+    roomData[name] = [...roomData[name], player]
   }
   io.to(name).emit("player_list", roomData[name])
 
@@ -42,7 +52,6 @@ function enterRoom(socket, name) {
   socket.emit("room_enter", room)
   console.log("rooms ::::: ")
   console.log(io.sockets.adapter.rooms.get(name))
-  // const peopleList = Array.from(io.sockets.adapter.rooms.get(name).values())
   const peopleList = [...io.sockets.adapter.rooms.get(name)]
   io.to(name).emit("people_list", peopleList)
   io.to(name).emit("message", `${socket.id} 님이 입장하셨습니다.`)
@@ -51,6 +60,13 @@ function enterRoom(socket, name) {
 function getRoom(name) {
   return roomList.find((room) => room.name == name)
 }
+function checkAccess(socket) {
+  if (!playerList.filter((player) => player.id === socket.id).length) {
+    console.log("socket.id 비정상 접속 테스트 ::: ", socket.id)
+    socket.emit("redirect", "/")
+    return
+  }
+}
 
 const port = 3001
 let roomList = []
@@ -58,6 +74,8 @@ let roomListWithPw = []
 let playerList = []
 const roomData = {}
 io.on("connection", (socket) => {
+  // checkAccess(socket)
+
   socket.onAny((event) => {
     console.log(`Socket event: ${event}`)
   })
@@ -127,11 +145,15 @@ io.on("connection", (socket) => {
   // })
 
   socket.on("nick_name", (obj) => {
-    //방 만들때
     const { id, nickName, name, password, people } = obj
     playerList.push({ id, nickName })
-    enterRoom(socket, name)
-    //방에 입장할때
+    if (password) {
+      //방 만들때
+      socket.emit("nick_name_ok", { name, password, people })
+    } else {
+      //방에 입장할때
+      socket.emit("nick_name_ok")
+    }
   })
 
   // 방입장이 패스워드 체크

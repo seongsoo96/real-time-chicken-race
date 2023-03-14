@@ -15,10 +15,12 @@ const router = createBrowserRouter([
   {
     path: '/makeNewRoom',
     element: <MakeNewRoom />,
+    errorElement: <WaitingRoom />,
   },
   {
     path: '/room/:id',
     element: <Room />,
+    errorElement: <WaitingRoom />,
   },
 ])
 

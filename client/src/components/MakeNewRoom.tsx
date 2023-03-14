@@ -70,6 +70,9 @@ export default function MakeNewRoom() {
   }, [errorMessage])
 
   useEffect(() => {
+    socket.on('nick_name_ok', (formState) => {
+      socket.emit('room_new', formState)
+    })
     socket.on('navigate', (name) => {
       navigate(`/room/${name}`)
     })

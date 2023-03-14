@@ -40,7 +40,8 @@ const defaultRoomInfo: RoomInfo = {
 
 export default function WaitingRoom() {
   const { isOpen, onOpen, onClose } = useDisclosure()
-  const [openPopup, setOpenPopup] = useState(false)
+  const [openPwPopup, setOpenPwPopup] = useState(false)
+  const [openNickPopup, setOpenNickPopup] = useState(false)
   const [inputPassword, setInputPassword] = useState('')
   const [roomList, setRoomList] = useState<RoomInfo[]>([])
   const [room, setRoom] = useState<RoomInfo>(defaultRoomInfo)
@@ -54,9 +55,17 @@ export default function WaitingRoom() {
     socket.emit('pw_check', { ...room, password })
   }
 
+  const handleNickNameSetting = (nick: string) => {
+    socket.emit('nick_name', {
+      id: socket.id,
+      nickName: nick,
+      ...room,
+    })
+  }
+
   const openPwCheckPopup = (room: RoomInfo) => {
     setRoom(room)
-    setOpenPopup(true)
+    setOpenPwPopup(true)
   }
 
   const enterRoom = () => {
@@ -80,11 +89,15 @@ export default function WaitingRoom() {
     socket.on('pw_check_ok', (ok) => {
       if (ok) {
         console.log('okokokok ::: ', room)
-        enterRoom()
+        setOpenNickPopup(true)
+        // enterRoom()
       } else {
         setPwCorrect(false)
-        setOpenPopup(false)
+        setOpenPwPopup(false)
       }
+    })
+    socket.on('nick_name_ok', () => {
+      enterRoom()
     })
   }, [room])
 
@@ -145,10 +158,16 @@ export default function WaitingRoom() {
           </VStack>
         </Box>
         <Popup
-          open={openPopup}
+          open={openPwPopup}
           type="password"
           title="비밀번호"
           func={checkPassword}
+        />
+        <Popup
+          type="nickname"
+          title="닉네임"
+          open={openNickPopup}
+          func={handleNickNameSetting}
         />
       </Box>
     </>

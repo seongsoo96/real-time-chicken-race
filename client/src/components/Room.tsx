@@ -38,10 +38,13 @@ export default function Room() {
   }
 
   useEffect(() => {
-    setOpenPopup(true)
-    socket.on('room_enter', (room) => {
+    socket.on('redirect', (url) => {
+      alert('잘못된 경로로 들어왔습니다.')
+      navigate(url)
+    })
+    socket.on('room_enter', (room, player) => {
       console.log(`${socket.id}가 방 '${room.name}'에 입장했습니다.`)
-      console.log(socket)
+      console.log(player)
       setRoomInfo({ ...room })
     })
     // socket.on('people_list', (list) => {
@@ -101,12 +104,12 @@ export default function Room() {
           ))}
       </UnorderedList>
       <p onClick={() => navigate('/')}>홈으로</p>
-      <Popup
+      {/* <Popup
         type="nickname"
         title="닉네임"
         open={openPopup}
         func={handleNickNameSetting}
-      />
+      /> */}
     </>
   )
 }
