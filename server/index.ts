@@ -25,35 +25,24 @@ function checkDuplicateRoomName(name) {
 function enterRoom(socket, name) {
   const room = getRoom(name)
   console.log(`Socket ${socket.id} is entering room ${name}.`)
-  console.log("room::: ", room)
   if (room === undefined) {
     socket.emit("error", "정상적인 방이 아닙니다.")
     return
   }
-  // roomData -  {
-  //               '방1': [
-  //                       {id: '1socket.id', nickName: '닉넴1'}
-  //                       {id: '2socket.id', nickName: '닉넴2'}
-  //                     ]
-  //               '방2': [
-  //                       {id: '3socket.id', nickName: '닉넴3'}
-  //                       {id: '4socket.id', nickName: '닉넴4'}
-  //                     ]
-  //             }
 
   const player = playerList.filter((player) => player.id === socket.id)[0]
   if (roomData[name]) {
     roomData[name] = [...roomData[name], player]
   }
-  io.to(name).emit("player_list", roomData[name])
+  const index = roomList.findIndex((room) => room.name === name)
+  if (index !== -1) {
+    roomList[index].count = roomData[name].length
+  }
 
+  io.emit("room_list", roomList)
   socket.emit("navigate", name)
   socket.join(name)
-  socket.emit("room_enter", room)
-  console.log("rooms ::::: ")
-  console.log(io.sockets.adapter.rooms.get(name))
-  const peopleList = [...io.sockets.adapter.rooms.get(name)]
-  io.to(name).emit("people_list", peopleList)
+  io.to(name).emit("room_enter", room, roomData[name])
   io.to(name).emit("message", `${socket.id} 님이 입장하셨습니다.`)
 }
 
@@ -72,6 +61,7 @@ const port = 3001
 let roomList = []
 let roomListWithPw = []
 let playerList = []
+const nickNameList = []
 const roomData = {}
 io.on("connection", (socket) => {
   // checkAccess(socket)
@@ -114,12 +104,12 @@ io.on("connection", (socket) => {
     const roomInfo = {
       name: formState.name,
       people: formState.people,
+      count: 0,
     }
 
     roomList.push(roomInfo)
     roomListWithPw.push({ ...roomInfo, password: formState.password })
     console.log(roomListWithPw)
-    io.sockets.emit("room_list", roomList)
 
     enterRoom(socket, name)
   })
@@ -146,13 +136,18 @@ io.on("connection", (socket) => {
 
   socket.on("nick_name", (obj) => {
     const { id, nickName, name, password, people } = obj
-    playerList.push({ id, nickName })
-    if (password) {
-      //방 만들때
-      socket.emit("nick_name_ok", { name, password, people })
+    if (nickNameList.find((nick) => nick === nickName)) {
+      socket.emit("error", `이미 존재하는 닉네임입니다.`)
     } else {
-      //방에 입장할때
-      socket.emit("nick_name_ok")
+      nickNameList.push(nickName)
+      playerList.push({ id, nickName })
+      if (password) {
+        //방 만들때
+        socket.emit("nick_name_ok", { name, password, people })
+      } else {
+        //방에 입장할때
+        socket.emit("nick_name_ok")
+      }
     }
   })
 
@@ -161,8 +156,10 @@ io.on("connection", (socket) => {
     console.log("pw_check roomListWithPw :::::")
     console.log(roomListWithPw.filter((r) => r.name === room.name)[0])
     let currRoom = roomListWithPw.filter((r) => r.name === room.name)[0]
-    if (currRoom) {
-      socket.emit("pw_check_ok", currRoom.password === room.password)
+    if (currRoom && currRoom.password === room.password) {
+      socket.emit("pw_check_ok")
+    } else {
+      socket.emit("error", "비밀번호가 틀렸습니다.")
     }
   })
 })

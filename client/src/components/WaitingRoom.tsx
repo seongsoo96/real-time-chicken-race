@@ -31,11 +31,13 @@ import Popup from './Popup'
 interface RoomInfo {
   name: string
   people: number
+  count: number
 }
 
 const defaultRoomInfo: RoomInfo = {
   name: '',
   people: 0,
+  count: 0,
 }
 
 export default function WaitingRoom() {
@@ -46,6 +48,8 @@ export default function WaitingRoom() {
   const [roomList, setRoomList] = useState<RoomInfo[]>([])
   const [room, setRoom] = useState<RoomInfo>(defaultRoomInfo)
   const [pwCorrect, setPwCorrect] = useState(true)
+  const [error, setError] = useState('')
+  const [message, setMessage] = useState('')
   const navigate = useNavigate()
   const makeNewRoom = () => {
     navigate('/makeNewRoom')
@@ -79,37 +83,35 @@ export default function WaitingRoom() {
       setRoomList(list)
     })
     socket.emit('room_list')
-
     return () => {
       socket.off('room_list')
     }
-  }, [])
+  }, [socket])
 
   useEffect(() => {
-    socket.on('pw_check_ok', (ok) => {
-      if (ok) {
-        console.log('okokokok ::: ', room)
-        setOpenNickPopup(true)
-        // enterRoom()
-      } else {
-        setPwCorrect(false)
-        setOpenPwPopup(false)
-      }
+    socket.on('pw_check_ok', () => {
+      setOpenNickPopup(true)
     })
     socket.on('nick_name_ok', () => {
       enterRoom()
     })
-  }, [room])
+    socket.on('error', (error) => {
+      setError(error.msg)
+      console.log(error)
+      if (error.type === 'pw_check') {
+        setOpenPwPopup(false)
+      } else {
+        setOpenNickPopup(false)
+      }
+    })
+  }, [room, error])
 
   return (
     <>
-      {!pwCorrect ? (
+      {error ? (
         <Alert status="error">
           <AlertIcon />
-          <AlertTitle>비번 틀림 ㅋㅋ</AlertTitle>
-          <AlertDescription>
-            Your Chakra experience may be degraded.
-          </AlertDescription>
+          <AlertTitle>{error}</AlertTitle>
         </Alert>
       ) : null}
       <Box
@@ -151,7 +153,9 @@ export default function WaitingRoom() {
                 </Box>
                 <Box w="1px" h="100%" bgColor="blackAlpha.300" />
                 <Box p="2">
-                  <Heading size="md">0 / {room.people}</Heading>
+                  <Heading size="md">
+                    {room.count} / {room.people}
+                  </Heading>
                 </Box>
               </Button>
             ))}
