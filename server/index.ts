@@ -22,28 +22,28 @@ function checkDuplicateRoomName(name) {
 }
 
 // 방입장
-function enterRoom(socket, name) {
-  const room = getRoom(name)
-  console.log(`Socket ${socket.id} is entering room ${name}.`)
+function enterRoom(socket, roomName) {
+  const room = getRoom(roomName)
+  console.log(`Socket ${socket.id} is entering room ${roomName}.`)
   if (room === undefined) {
     socket.emit("error", "정상적인 방이 아닙니다.")
     return
   }
 
   const player = playerList.filter((player) => player.id === socket.id)[0]
-  if (roomData[name]) {
-    roomData[name] = [...roomData[name], player]
+  if (roomData[roomName]) {
+    roomData[roomName] = [...roomData[roomName], player]
   }
-  const index = roomList.findIndex((room) => room.name === name)
+  const index = roomList.findIndex((room) => room.name === roomName)
   if (index !== -1) {
-    roomList[index].count = roomData[name].length
+    roomList[index].count = roomData[roomName].length
   }
 
   io.emit("room_list", roomList)
-  socket.emit("navigate", name)
-  socket.join(name)
-  io.to(name).emit("room_enter", room, roomData[name])
-  io.to(name).emit("message", `${socket.id} 님이 입장하셨습니다.`)
+  socket.emit("navigate", roomName)
+  socket.join(roomName)
+  io.to(roomName).emit("room_enter", room, roomData[roomName])
+  io.to(roomName).emit("message", `${socket.id} 님이 입장하셨습니다.`)
 }
 
 function getRoom(name) {
@@ -54,6 +54,43 @@ function checkAccess(socket) {
     console.log("socket.id 비정상 접속 테스트 ::: ", socket.id)
     socket.emit("redirect", "/")
     return
+  }
+}
+
+function getJoinedRoomName(socket) {
+  return Array.from(socket.rooms)[1] || ""
+}
+
+//이름이 roomName인 방에 속한 Socket 개수 반환
+function countRoom(roomName) {
+  console.log("countRoom ::: ", io.sockets.adapter.rooms.get(roomName)?.size)
+  return io.sockets.adapter.rooms.get(roomName)?.size || 0
+}
+
+function leaveRoom(socket) {
+  console.log("rooms:: ", socket.rooms)
+  const roomName = getJoinedRoomName(socket)
+  console.log("roomName ::: ", roomName)
+
+  console.log(`Socket ${socket.id} is leaving room ${roomName}.`)
+
+  if (roomName) {
+    //현재 Disconnect 하는 Socket이 해당 방의 마지막 소켓일 경우 방 제거
+    if (countRoom(roomName) === 1) {
+      console.log(`Remove room ${roomName}`)
+      roomList = roomList.filter((value) => value.name != roomName)
+      console.log("leaveRoom roomList :: ", roomList)
+      io.emit("room_list", roomList)
+    } else {
+      const room = getRoom(roomName)
+      if (room) {
+        console.log("leaveRoom room ::: ", room)
+        room.count -= room.count
+        console.log("leaveRoom room ::: ", room)
+      }
+    }
+    socket.emit("navigate", "/")
+    socket.leave(roomName)
   }
 }
 
@@ -137,7 +174,8 @@ io.on("connection", (socket) => {
   socket.on("nick_name", (obj) => {
     const { id, nickName, name, password, people } = obj
     if (nickNameList.find((nick) => nick === nickName)) {
-      socket.emit("error", `이미 존재하는 닉네임입니다.`)
+      const error = { msg: "이미 존재하는 닉네임입니다.", type: "nick_check" }
+      socket.emit("error", error)
     } else {
       nickNameList.push(nickName)
       playerList.push({ id, nickName })
@@ -153,14 +191,19 @@ io.on("connection", (socket) => {
 
   // 방입장이 패스워드 체크
   socket.on("pw_check", (room) => {
-    console.log("pw_check roomListWithPw :::::")
-    console.log(roomListWithPw.filter((r) => r.name === room.name)[0])
     let currRoom = roomListWithPw.filter((r) => r.name === room.name)[0]
     if (currRoom && currRoom.password === room.password) {
       socket.emit("pw_check_ok")
     } else {
-      socket.emit("error", "비밀번호가 틀렸습니다.")
+      const error = { msg: "비밀번호가 틀렸습니다.", type: "pw_check" }
+      socket.emit("error", error)
     }
+  })
+
+  // 새로고침이나 방 나갈 때
+  socket.on("disconnecting", () => {
+    console.log(`Socket ${socket.id} is disconnecting.`)
+    leaveRoom(socket)
   })
 })
 

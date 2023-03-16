@@ -74,37 +74,38 @@ export default function WaitingRoom() {
 
   const enterRoom = () => {
     socket.emit('room_enter', room)
+    console.log(room)
+
     navigate(`/room/${room.name}`)
   }
 
   useEffect(() => {
-    socket.on('room_list', (list) => {
-      console.log('waitingRoom room_list.on list ::::', list)
+    socket.listen('room_list', (list) => {
       setRoomList(list)
     })
     socket.emit('room_list')
-    return () => {
-      socket.off('room_list')
-    }
-  }, [socket])
-
-  useEffect(() => {
     socket.on('pw_check_ok', () => {
+      setOpenPwPopup(false)
       setOpenNickPopup(true)
     })
     socket.on('nick_name_ok', () => {
       enterRoom()
     })
-    socket.on('error', (error) => {
-      setError(error.msg)
-      console.log(error)
-      if (error.type === 'pw_check') {
+    socket.on('error', (err) => {
+      console.log('err ::: ', err)
+      setError(err.msg)
+      if (err.type === 'pw_check') {
         setOpenPwPopup(false)
-      } else {
+      } else if (err.type === 'nick_check') {
         setOpenNickPopup(false)
       }
     })
-  }, [room, error])
+    return () => {
+      socket.off('room_list')
+    }
+  }, [])
+
+  useEffect(() => {}, [room])
 
   return (
     <>
