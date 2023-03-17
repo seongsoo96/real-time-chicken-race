@@ -26,18 +26,20 @@ import {
 import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { socket } from '../store/socket'
+import { RoomInfo } from '../types/room'
 import Popup from './Popup'
 // import { useRoomListStore } from '../store/store'
-interface RoomInfo {
-  name: string
-  people: number
-  count: number
-}
 
 const defaultRoomInfo: RoomInfo = {
   name: '',
   people: 0,
   count: 0,
+}
+
+interface FormState {
+  name: string
+  password: string
+  people: number
 }
 
 export default function WaitingRoom() {
@@ -55,6 +57,11 @@ export default function WaitingRoom() {
     navigate('/makeNewRoom')
   }
 
+  const openPwCheckPopup = (room: RoomInfo) => {
+    setRoom(room)
+    setOpenPwPopup(true)
+  }
+
   const checkPassword = (password: string) => {
     socket.emit('pw_check', { ...room, password })
   }
@@ -63,20 +70,14 @@ export default function WaitingRoom() {
     socket.emit('nick_name', {
       id: socket.id,
       nickName: nick,
-      ...room,
     })
   }
 
-  const openPwCheckPopup = (room: RoomInfo) => {
-    setRoom(room)
-    setOpenPwPopup(true)
-  }
+  const enterRoom = (roomName: string) => {
+    socket.emit('room_enter', roomName)
+    console.log(roomName)
 
-  const enterRoom = () => {
-    socket.emit('room_enter', room)
-    console.log(room)
-
-    navigate(`/room/${room.name}`)
+    navigate(`/room/${roomName}`)
   }
 
   useEffect(() => {
@@ -88,8 +89,8 @@ export default function WaitingRoom() {
       setOpenPwPopup(false)
       setOpenNickPopup(true)
     })
-    socket.on('nick_name_ok', () => {
-      enterRoom()
+    socket.on('nick_name_ok', ({ name }: FormState) => {
+      enterRoom(name)
     })
     socket.on('error', (err) => {
       console.log('err ::: ', err)
@@ -104,8 +105,6 @@ export default function WaitingRoom() {
       socket.off('room_list')
     }
   }, [])
-
-  useEffect(() => {}, [room])
 
   return (
     <>

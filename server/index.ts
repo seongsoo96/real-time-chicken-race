@@ -12,6 +12,25 @@ const io = new Server(server, {
   },
 })
 
+interface FormState {
+  name: string
+  password: string
+  people: number
+}
+
+type RoomInfo = {
+  /**
+   * @param name {string}
+   */
+  name: string
+  people: number
+  count: number
+}
+
+interface RoomInfoWithPw extends RoomInfo {
+  password: string
+}
+
 //중복된 이름의 방이 존재할 경우 false, 없을 경우 true
 function checkDuplicateRoomName(name) {
   if (io.sockets.adapter.rooms.get(name)) {
@@ -22,13 +41,9 @@ function checkDuplicateRoomName(name) {
 }
 
 // 방입장
-function enterRoom(socket, roomName) {
+function enterRoom(socket, roomName: string) {
   const room = getRoom(roomName)
   console.log(`Socket ${socket.id} is entering room ${roomName}.`)
-  if (room === undefined) {
-    socket.emit("error", "정상적인 방이 아닙니다.")
-    return
-  }
 
   const player = playerList.filter((player) => player.id === socket.id)[0]
   if (roomData[roomName]) {
@@ -95,8 +110,8 @@ function leaveRoom(socket) {
 }
 
 const port = 3001
-let roomList = []
-let roomListWithPw = []
+let roomList: RoomInfo[] = []
+let roomListWithPw: RoomInfoWithPw[] = []
 let playerList = []
 const nickNameList = []
 const roomData = {}
@@ -113,13 +128,15 @@ io.on("connection", (socket) => {
   })
 
   //방 만들기
-  socket.on("room_new", (formState) => {
-    const name = formState.name
-    console.log(`Socket ${socket.id} is creating room ${name}.`)
+  socket.on("room_new", (formState: FormState) => {
+    console.log("✅ server :::  room_new------------")
+
+    const roomName = formState.name
+    console.log(`Socket ${socket.id} is creating room ${roomName}.`)
 
     // 방 데이터 초기화(방마다 플레이어 데이터 넣을거임)
-    if (!roomData[name]) {
-      roomData[name] = []
+    if (!roomData[roomName]) {
+      roomData[roomName] = []
     }
 
     //Socket은 ID와 같은 Room을 Default로 갖고 있음
@@ -131,14 +148,13 @@ io.on("connection", (socket) => {
     }
 
     //동일한 방이 존재할 경우
-    if (!checkDuplicateRoomName(name)) {
-      console.log(`Room name ${name} already exists.`)
+    if (!checkDuplicateRoomName(roomName)) {
+      console.log(`Room name ${roomName} already exists.`)
       socket.emit("error", "동일한 방이 이미 존재합니다.")
       return
     }
 
-    console.log("-----------------------")
-    const roomInfo = {
+    const roomInfo: RoomInfo = {
       name: formState.name,
       people: formState.people,
       count: 0,
@@ -146,50 +162,11 @@ io.on("connection", (socket) => {
 
     roomList.push(roomInfo)
     roomListWithPw.push({ ...roomInfo, password: formState.password })
-    console.log(roomListWithPw)
 
-    enterRoom(socket, name)
+    enterRoom(socket, roomName)
   })
 
-  //기존 방 참가
-  socket.on("room_enter", (room) => {
-    if (socket.rooms.size > 1) {
-      console.log(`socket ${socket.id} is already in room.`)
-      console.log(socket.rooms)
-      socket.emit("error", "이미 다른 방에 참가중입니다.")
-      return
-    }
-
-    enterRoom(socket, room.name)
-  })
-
-  // socket.on("nick_name", (obj) => {
-  //   const { id, nickName, roomName } = obj
-  //   if (roomData[roomName]) {
-  //     roomData[roomName] = [...roomData[roomName], { id, nickName }]
-  //   }
-  //   io.to(roomName).emit("player_list", roomData[roomName])
-  // })
-
-  socket.on("nick_name", (obj) => {
-    const { id, nickName, name, password, people } = obj
-    if (nickNameList.find((nick) => nick === nickName)) {
-      const error = { msg: "이미 존재하는 닉네임입니다.", type: "nick_check" }
-      socket.emit("error", error)
-    } else {
-      nickNameList.push(nickName)
-      playerList.push({ id, nickName })
-      if (password) {
-        //방 만들때
-        socket.emit("nick_name_ok", { name, password, people })
-      } else {
-        //방에 입장할때
-        socket.emit("nick_name_ok")
-      }
-    }
-  })
-
-  // 방입장이 패스워드 체크
+  // 방 입장 시 패스워드 체크
   socket.on("pw_check", (room) => {
     let currRoom = roomListWithPw.filter((r) => r.name === room.name)[0]
     if (currRoom && currRoom.password === room.password) {
@@ -198,6 +175,38 @@ io.on("connection", (socket) => {
       const error = { msg: "비밀번호가 틀렸습니다.", type: "pw_check" }
       socket.emit("error", error)
     }
+  })
+
+  // 방 생성 or 방 입장 시 닉네임 중복체크
+  socket.on("nick_name", (obj) => {
+    const { id, nickName, name, password, people } = obj
+    if (nickNameList.find((nick) => nick === nickName)) {
+      const error = { msg: "이미 존재하는 닉네임입니다.", type: "nick_check" }
+      socket.emit("error", error)
+    } else {
+      nickNameList.push(nickName)
+      playerList.push({ id, nickName })
+      socket.emit("nick_name_ok", { name, password, people })
+      // if (password) {
+      //   //방 만들때
+      //   socket.emit("nick_name_ok", { name, password, people })
+      // } else {
+      //   //방에 입장할때
+      //   socket.emit("nick_name_ok")
+      // }
+    }
+  })
+
+  //기존 방 참가
+  socket.on("room_enter", (roomName: string) => {
+    if (socket.rooms.size > 1) {
+      console.log(`socket ${socket.id} is already in room.`)
+      console.log(socket.rooms)
+      socket.emit("error", "이미 다른 방에 참가중입니다.")
+      return
+    }
+
+    enterRoom(socket, roomName)
   })
 
   // 새로고침이나 방 나갈 때

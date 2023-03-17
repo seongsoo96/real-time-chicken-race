@@ -19,12 +19,14 @@ import { useNavigate } from 'react-router-dom'
 import { socket } from '../store/socket'
 import { RoomInfo } from '../../interface'
 import Popup from './Popup'
+import { FormState } from '../types/room'
 // import { useRoomListStore } from '../store/store'
+let a: RoomInfo[] = []
 
-interface FormState {
-  name: string
-  password: string
-  people: number
+const defaultFormState: FormState = {
+  name: '',
+  password: '',
+  people: 0,
 }
 
 export default function MakeNewRoom() {
@@ -32,11 +34,7 @@ export default function MakeNewRoom() {
   const navigate = useNavigate()
   const [errorMessage, setErrorMessage] = useState('')
   const [openPopup, setOpenPopup] = useState(false)
-  const [formState, setFormState] = useState<FormState>({
-    name: '',
-    password: '',
-    people: 4,
-  })
+  const [formState, setFormState] = useState<FormState>(defaultFormState)
 
   const handleInputChange = (
     event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
@@ -63,19 +61,21 @@ export default function MakeNewRoom() {
     })
   }
 
-  useEffect(() => {
-    socket.on('error', (message) => {
-      setErrorMessage(message)
-    })
-  }, [errorMessage])
+  // useEffect(() => {
+  //   socket.on('error', (message) => {
+  //     setErrorMessage(message)
+  //   })
+  // }, [errorMessage])
 
   useEffect(() => {
-    socket.on('nick_name_ok', (formState) => {
+    socket.on('nick_name_ok', (formState: FormState) => {
       socket.emit('room_new', formState)
     })
     socket.on('navigate', (name) => {
       navigate(`/room/${name}`)
     })
+    socket.emit('room_new', formState)
+    socket.listen
   }, [])
   return (
     <>
