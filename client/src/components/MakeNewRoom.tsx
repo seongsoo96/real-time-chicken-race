@@ -67,6 +67,7 @@ export default function MakeNewRoom() {
   //   })
   // }, [errorMessage])
 
+  socket.listen('')
   useEffect(() => {
     socket.on('nick_name_ok', (formState: FormState) => {
       socket.emit('room_new', formState)
@@ -92,7 +93,7 @@ export default function MakeNewRoom() {
       <Box>
         <form onSubmit={handleSubmit}>
           <FormControl id="name" isRequired>
-            <FormLabel>방이름</FormLabel>
+            <FormLabel>방 이름</FormLabel>
             <Input
               type="text"
               name="name"
