@@ -17,11 +17,9 @@ import {
 import React, { FormEvent, useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { socket } from '../store/socket'
-import { RoomInfo } from '../../interface'
 import Popup from './Popup'
 import { FormState } from '../types/room'
 // import { useRoomListStore } from '../store/store'
-let a: RoomInfo[] = []
 
 const defaultFormState: FormState = {
   name: '',
@@ -49,7 +47,6 @@ export default function MakeNewRoom() {
   // }
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault()
-    // socket.emit('room_new', formState)
     setOpenPopup(true)
   }
 
@@ -67,17 +64,15 @@ export default function MakeNewRoom() {
   //   })
   // }, [errorMessage])
 
-  socket.listen('')
   useEffect(() => {
-    socket.on('nick_name_ok', (formState: FormState) => {
-      socket.emit('room_new', formState)
-    })
-    socket.on('navigate', (name) => {
+    // socket.listen('nick_name_ok', (formState: FormState) => {
+    //   socket.emit('room_new', formState)
+    // })
+    socket.listen('navigate', (name) => {
       navigate(`/room/${name}`)
     })
-    socket.emit('room_new', formState)
-    socket.listen
   }, [])
+
   return (
     <>
       {errorMessage ? (
@@ -93,7 +88,7 @@ export default function MakeNewRoom() {
       <Box>
         <form onSubmit={handleSubmit}>
           <FormControl id="name" isRequired>
-            <FormLabel>방 이름</FormLabel>
+            <FormLabel>방이름</FormLabel>
             <Input
               type="text"
               name="name"

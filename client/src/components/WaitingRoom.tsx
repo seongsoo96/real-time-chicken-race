@@ -70,15 +70,16 @@ export default function WaitingRoom() {
     socket.emit('nick_name', {
       id: socket.id,
       nickName: nick,
+      name: room.name,
     })
   }
 
-  const enterRoom = (roomName: string) => {
-    socket.emit('room_enter', roomName)
-    console.log(roomName)
+  // const enterRoom = (roomName: string) => {
+  //   socket.emit('room_enter', roomName)
+  //   console.log(roomName)
 
-    navigate(`/room/${roomName}`)
-  }
+  //   navigate(`/room/${roomName}`)
+  // }
 
   useEffect(() => {
     socket.listen('room_list', (list) => {
@@ -89,8 +90,12 @@ export default function WaitingRoom() {
       setOpenPwPopup(false)
       setOpenNickPopup(true)
     })
-    socket.on('nick_name_ok', ({ name }: FormState) => {
-      enterRoom(name)
+    // socket.on('nick_name_ok', ({ name }: FormState) => {
+    //   enterRoom(name)
+    // })
+    socket.on('navigate', (roomName) => {
+      console.log('roomName ::: ', roomName)
+      navigate(`/room/${roomName}`)
     })
     socket.on('error', (err) => {
       console.log('err ::: ', err)

@@ -3,14 +3,53 @@ const app = require("express")()
 const server = http.createServer(app)
 const cors = require("cors")
 const router = require("express").Router()
-import { Server } from "socket.io"
+import { Server, Socket } from "socket.io"
 app.use(cors())
-const io = new Server(server, {
+const io = new Server<
+  ClientToServerEvents,
+  ServerToClientEvents,
+  InterServerEvents,
+  SocketData
+>(server, {
   cors: {
     origin: "*",
     credentials: true,
   },
 })
+interface SocketErrorMessage {
+  msg: string
+  type: "pw_check" | "nick_check"
+}
+interface ServerToClientEvents {
+  room_list: (roomList: RoomInfo[]) => void
+  room_enter: (room: RoomInfo, playerList: PlayerInfo[]) => void
+  error: (message: SocketErrorMessage) => void
+  nick_name_ok: (formState: FormState) => void
+  navigate: (name: string) => void
+  pw_check_ok: () => void
+}
+
+interface PlayerInfo {
+  id: string
+  nickName: string
+}
+
+interface ClientToServerEvents {
+  nick_name: (args: { id: string; nickName: string } & FormState) => void
+  room_enter: (roomName: string) => void
+  pw_check: (args: RoomInfo & { password: string }) => void
+  room_list: () => void
+  room_new: (formState: FormState) => void
+}
+
+interface InterServerEvents {
+  ping: () => void
+}
+
+interface SocketData {
+  name: string
+  age: number
+}
 
 interface FormState {
   name: string
@@ -41,7 +80,7 @@ function checkDuplicateRoomName(name) {
 }
 
 // 방입장
-function enterRoom(socket, roomName: string) {
+function enterRoom(socket: Socket, roomName: string) {
   const room = getRoom(roomName)
   console.log(`Socket ${socket.id} is entering room ${roomName}.`)
 
@@ -55,10 +94,11 @@ function enterRoom(socket, roomName: string) {
   }
 
   io.emit("room_list", roomList)
+  console.log("roomName ::: ", roomName)
   socket.emit("navigate", roomName)
   socket.join(roomName)
   io.to(roomName).emit("room_enter", room, roomData[roomName])
-  io.to(roomName).emit("message", `${socket.id} 님이 입장하셨습니다.`)
+  // io.to(roomName).emit("message", `${socket.id} 님이 입장하셨습니다.`)
 }
 
 function getRoom(name) {
@@ -109,6 +149,43 @@ function leaveRoom(socket) {
   }
 }
 
+function roomNew(socket: Socket, formState: FormState) {
+  const roomName = formState.name
+  console.log(`Socket ${socket.id} is creating room ${roomName}.`)
+
+  // 방 데이터 초기화(방마다 플레이어 데이터 넣을거임)
+  if (!roomData[roomName]) {
+    roomData[roomName] = []
+  }
+
+  //Socket은 ID와 같은 Room을 Default로 갖고 있음
+  console.log("socket.rooms.size ::: ", socket.rooms)
+  if (socket.rooms.size > 1) {
+    console.log(`socket ${socket.id} is already in room.`)
+    console.log(socket.rooms)
+    socket.emit("error", "이미 다른 방에 참가중입니다.")
+    return
+  }
+
+  //동일한 방이 존재할 경우
+  if (!checkDuplicateRoomName(roomName)) {
+    console.log(`Room name ${roomName} already exists.`)
+    socket.emit("error", "동일한 방이 이미 존재합니다.")
+    return
+  }
+
+  const roomInfo: RoomInfo = {
+    name: formState.name,
+    people: formState.people,
+    count: 0,
+  }
+
+  roomList.push(roomInfo)
+  roomListWithPw.push({ ...roomInfo, password: formState.password })
+
+  enterRoom(socket, roomName)
+}
+
 const port = 3001
 let roomList: RoomInfo[] = []
 let roomListWithPw: RoomInfoWithPw[] = []
@@ -140,19 +217,20 @@ io.on("connection", (socket) => {
     }
 
     //Socket은 ID와 같은 Room을 Default로 갖고 있음
-    if (socket.rooms.size > 1) {
-      console.log(`socket ${socket.id} is already in room.`)
-      console.log(socket.rooms)
-      socket.emit("error", "이미 다른 방에 참가중입니다.")
-      return
-    }
+    // console.log('socket.rooms.size ::: ', socket.rooms)
+    // if (socket.rooms.size > 1) {
+    //   console.log(`socket ${socket.id} is already in room.`)
+    //   console.log(socket.rooms)
+    //   socket.emit("error", "이미 다른 방에 참가중입니다.")
+    //   return
+    // }
 
     //동일한 방이 존재할 경우
-    if (!checkDuplicateRoomName(roomName)) {
-      console.log(`Room name ${roomName} already exists.`)
-      socket.emit("error", "동일한 방이 이미 존재합니다.")
-      return
-    }
+    // if (!checkDuplicateRoomName(roomName)) {
+    //   console.log(`Room name ${roomName} already exists.`)
+    //   socket.emit("error", "동일한 방이 이미 존재합니다.")
+    //   return
+    // }
 
     const roomInfo: RoomInfo = {
       name: formState.name,
@@ -172,7 +250,10 @@ io.on("connection", (socket) => {
     if (currRoom && currRoom.password === room.password) {
       socket.emit("pw_check_ok")
     } else {
-      const error = { msg: "비밀번호가 틀렸습니다.", type: "pw_check" }
+      const error: SocketErrorMessage = {
+        msg: "비밀번호가 틀렸습니다.",
+        type: "pw_check",
+      }
       socket.emit("error", error)
     }
   })
@@ -180,20 +261,28 @@ io.on("connection", (socket) => {
   // 방 생성 or 방 입장 시 닉네임 중복체크
   socket.on("nick_name", (obj) => {
     const { id, nickName, name, password, people } = obj
+    console.log("obj :::: ", obj)
     if (nickNameList.find((nick) => nick === nickName)) {
-      const error = { msg: "이미 존재하는 닉네임입니다.", type: "nick_check" }
+      const error: SocketErrorMessage = {
+        msg: "이미 존재하는 닉네임입니다.",
+        type: "nick_check",
+      }
       socket.emit("error", error)
     } else {
       nickNameList.push(nickName)
       playerList.push({ id, nickName })
-      socket.emit("nick_name_ok", { name, password, people })
-      // if (password) {
-      //   //방 만들때
-      //   socket.emit("nick_name_ok", { name, password, people })
-      // } else {
-      //   //방에 입장할때
-      //   socket.emit("nick_name_ok")
-      // }
+      if (password) {
+        roomNew(socket, { name, password, people })
+      } else {
+        if (socket.rooms.size > 1) {
+          console.log(`socket ${socket.id} is already in room.`)
+          console.log(socket.rooms)
+          // socket.emit("error", "이미 다른 방에 참가중입니다.")
+          return
+        }
+        enterRoom(socket, name)
+      }
+      // socket.emit("nick_name_ok", { name, password, people })
     }
   })
 
@@ -202,7 +291,7 @@ io.on("connection", (socket) => {
     if (socket.rooms.size > 1) {
       console.log(`socket ${socket.id} is already in room.`)
       console.log(socket.rooms)
-      socket.emit("error", "이미 다른 방에 참가중입니다.")
+      // socket.emit("error", "이미 다른 방에 참가중입니다.")
       return
     }
 

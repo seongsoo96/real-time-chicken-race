@@ -1,7 +1,7 @@
 import { io, Socket } from 'socket.io-client'
-import { FormState, RoomInfo } from '../types/room'
+import { FormState, PlayerInfo, RoomInfo } from '../types/room'
 interface ClientToServer {
-  nick_name: (args: { id: string; nickName: string }) => void
+  nick_name: (args: { id: string; nickName: string; name: string }) => void
   room_enter: (roomName: string) => void
   pw_check: (args: RoomInfo & { password: string }) => void
   room_list: () => void
@@ -18,6 +18,7 @@ export interface ServerToClient {
   navigate: (name: string) => void
   room_list: (roomList: RoomInfo[]) => void
   pw_check_ok: () => void
+  room_enter: (room: RoomInfo, playerList: PlayerInfo[]) => void
 }
 const socket: Socket<ServerToClient, ClientToServer> = io('localhost:3001/')
 socket.listen = (key: keyof ServerToClient, fn: (...args: any[]) => void) => {
