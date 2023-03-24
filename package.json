@@ -1,5 +1,10 @@
 {
+  "name": "dino",
   "private": true,
+  "workspaces": [
+    "client",
+    "server"
+  ],
   "scripts": {
     "build": "turbo run build",
     "dev": "turbo run dev",
@@ -12,6 +17,5 @@
     "prettier": "^2.5.1",
     "turbo": "latest"
   },
-  "packageManager": "yarn@1.22.19",
-  "version": "0.0.0"
+  "packageManager": "yarn@1.22.19"
 }

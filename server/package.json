@@ -1,5 +1,5 @@
 {
-  "name": "dino-server",
+  "name": "server",
   "version": "1.0.0",
   "description": "dino socket.io server",
   "main": "index.js",
@@ -7,6 +7,7 @@
   "license": "MIT",
   "scripts": {
     "start": "ts-node ./index.ts",
+    "build": "npx tsc",
     "dev": "nodemon --watch ./*.ts --exec \"npm start\""
   },
   "dependencies": {

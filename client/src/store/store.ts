@@ -1,5 +1,5 @@
 import create from 'zustand'
-import { RoomInfo } from '../../interface'
+import { RoomInfo } from '../types/room'
 
 interface RoomListState {
   roomList: RoomInfo[]
