@@ -8,18 +8,14 @@ import {
   FormControl,
   FormLabel,
   Input,
-  NumberDecrementStepper,
-  NumberIncrementStepper,
   NumberInput,
   NumberInputField,
-  NumberInputStepper,
 } from '@chakra-ui/react'
 import React, { FormEvent, useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { socket } from '../store/socket'
 import Popup from './Popup'
-import { FormState } from '../types/room'
-// import { useRoomListStore } from '../store/store'
+import { FormState } from 'types'
 
 const defaultFormState: FormState = {
   name: '',
@@ -28,9 +24,8 @@ const defaultFormState: FormState = {
 }
 
 export default function MakeNewRoom() {
-  // const { roomList, addRoom, removeRoom, updateRoom } = useRoomListStore()
   const navigate = useNavigate()
-  const [errorMessage, setErrorMessage] = useState('')
+  const [errorMessage] = useState('')
   const [openPopup, setOpenPopup] = useState(false)
   const [formState, setFormState] = useState<FormState>(defaultFormState)
 
@@ -41,10 +36,6 @@ export default function MakeNewRoom() {
     setFormState((prevState) => ({ ...prevState, [name]: value }))
   }
 
-  // const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
-  //   event.preventDefault()
-  //   socket.emit('room_new', formState)
-  // }
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault()
     setOpenPopup(true)
@@ -58,16 +49,7 @@ export default function MakeNewRoom() {
     })
   }
 
-  // useEffect(() => {
-  //   socket.on('error', (message) => {
-  //     setErrorMessage(message)
-  //   })
-  // }, [errorMessage])
-
   useEffect(() => {
-    // socket.listen('nick_name_ok', (formState: FormState) => {
-    //   socket.emit('room_new', formState)
-    // })
     socket.listen('navigate', (name) => {
       navigate(`/room/${name}`)
     })

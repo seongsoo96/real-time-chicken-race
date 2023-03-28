@@ -13,7 +13,8 @@
   "dependencies": {
     "cors": "^2.8.5",
     "express": "^4.18.2",
-    "socket.io": "^4.6.1"
+    "socket.io": "^4.6.1",
+    "types": "*"
   },
   "devDependencies": {
     "@types/socket.io": "^3.0.2",

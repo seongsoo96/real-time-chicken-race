@@ -1,5 +1,5 @@
 import { Box } from '@chakra-ui/react'
-import { GlobalLayoutProps } from '../../interface'
+import { GlobalLayoutProps } from 'types'
 
 export default function GlobalLayout({ children }: GlobalLayoutProps) {
   return (

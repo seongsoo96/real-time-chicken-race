@@ -1,34 +1,18 @@
 import {
   Box,
-  Flex,
   Heading,
-  Spinner,
   VStack,
-  Text,
-  Spacer,
-  ButtonGroup,
   Button,
-  ModalContent,
-  Modal,
-  ModalBody,
-  ModalCloseButton,
-  ModalFooter,
-  ModalHeader,
-  ModalOverlay,
-  useDisclosure,
-  Input,
-  InputProps,
   Alert,
-  AlertDescription,
   AlertIcon,
   AlertTitle,
+  Image,
 } from '@chakra-ui/react'
 import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { socket } from '../store/socket'
-import { RoomInfo } from '../types/room'
+import { RoomInfo } from 'types'
 import Popup from './Popup'
-// import { useRoomListStore } from '../store/store'
 
 const defaultRoomInfo: RoomInfo = {
   name: '',
@@ -36,22 +20,12 @@ const defaultRoomInfo: RoomInfo = {
   count: 0,
 }
 
-interface FormState {
-  name: string
-  password: string
-  people: number
-}
-
 export default function WaitingRoom() {
-  const { isOpen, onOpen, onClose } = useDisclosure()
   const [openPwPopup, setOpenPwPopup] = useState(false)
   const [openNickPopup, setOpenNickPopup] = useState(false)
-  const [inputPassword, setInputPassword] = useState('')
   const [roomList, setRoomList] = useState<RoomInfo[]>([])
   const [room, setRoom] = useState<RoomInfo>(defaultRoomInfo)
-  const [pwCorrect, setPwCorrect] = useState(true)
   const [error, setError] = useState('')
-  const [message, setMessage] = useState('')
   const navigate = useNavigate()
   const makeNewRoom = () => {
     navigate('/makeNewRoom')
@@ -71,15 +45,10 @@ export default function WaitingRoom() {
       id: socket.id,
       nickName: nick,
       name: room.name,
+      password: '',
+      people: 0,
     })
   }
-
-  // const enterRoom = (roomName: string) => {
-  //   socket.emit('room_enter', roomName)
-  //   console.log(roomName)
-
-  //   navigate(`/room/${roomName}`)
-  // }
 
   useEffect(() => {
     socket.listen('room_list', (list) => {
@@ -90,9 +59,6 @@ export default function WaitingRoom() {
       setOpenPwPopup(false)
       setOpenNickPopup(true)
     })
-    // socket.on('nick_name_ok', ({ name }: FormState) => {
-    //   enterRoom(name)
-    // })
     socket.on('navigate', (roomName) => {
       console.log('roomName ::: ', roomName)
       navigate(`/room/${roomName}`)
@@ -128,16 +94,19 @@ export default function WaitingRoom() {
         justifyContent="center"
       >
         <Box
-          w="md"
+          w="375px"
+          minH="387px"
           bg="white"
           p="6"
           borderRadius="md"
           boxShadow="md"
           textAlign="center"
+          bgImage="/images/bgMainScreen.png"
+          bgSize="cover"
         >
-          <Box p="2">
-            <Heading size="md">Dino</Heading>
-          </Box>
+          <Box boxSize="sm">
+            <Image maxW="222px" src="/images/GameTitle.png" alt="chiken race" />
+          </Box>{' '}
           <hr />
           <VStack spacing="4" align="stretch">
             <Button onClick={makeNewRoom} colorScheme="blue" mt="4">

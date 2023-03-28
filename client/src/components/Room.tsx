@@ -1,13 +1,12 @@
 import { Box, Divider, ListItem, UnorderedList, Text } from '@chakra-ui/react'
 import { useEffect, useState } from 'react'
-import { useLocation, useNavigate } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 import { socket } from '../store/socket'
-import { PlayerInfo, RoomInfo } from '../types/room'
+import { PlayerInfo, RoomInfo } from 'types'
 
 const roomInfoDefault: RoomInfo = { name: '', people: 0, count: 0 }
 const myInfoDefault: PlayerInfo = { id: '', nickName: '' }
 export default function Room() {
-  const location = useLocation()
   const navigate = useNavigate()
   const [myInfo, setMyInfo] = useState<PlayerInfo>(myInfoDefault)
   const [othersInfo, setOthersInfo] = useState<PlayerInfo[]>([])
@@ -15,10 +14,6 @@ export default function Room() {
   const [roomInfo, setRoomInfo] = useState<RoomInfo>(roomInfoDefault)
 
   useEffect(() => {
-    // socket.on('redirect', (url) => {
-    //   alert('잘못된 경로로 들어왔습니다.')
-    //   navigate(url)
-    // })
     socket.listen('room_enter', (room: RoomInfo, list: PlayerInfo[]) => {
       console.log(`${socket.id}가 방 '${room.name}'에 입장했습니다.`)
       console.log(`playerList :::`, list)
@@ -28,16 +23,6 @@ export default function Room() {
       setOthersInfo(list.filter((player) => player.id !== socket.id))
     })
   }, [])
-  useEffect(() => {
-    // socket.on('room_enter', (room: RoomInfo, list: PlayerInfo[]) => {
-    //   console.log(`${socket.id}가 방 '${room.name}'에 입장했습니다.`)
-    //   console.log(`playerList :::`, list)
-    //   setRoomInfo({ ...room })
-    //   setPlayerList(list)
-    //   setMyInfo(list.filter((player) => player.id === socket.id)[0])
-    //   setOthersInfo(list.filter((player) => player.id !== socket.id))
-    // })
-  }, [playerList, myInfo, othersInfo])
 
   return (
     <>
