@@ -3,14 +3,7 @@ import { GlobalLayoutProps } from 'types'
 
 export default function GlobalLayout({ children }: GlobalLayoutProps) {
   return (
-    <Box
-      maxW="500px"
-      h="100vh"
-      my="0"
-      mx="auto"
-      bg="lightgray"
-      textAlign="center"
-    >
+    <Box h="100vh" bg="#323B38" textAlign="center">
       {children}
     </Box>
   )

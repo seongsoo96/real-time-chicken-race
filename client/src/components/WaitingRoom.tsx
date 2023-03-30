@@ -1,18 +1,22 @@
 import {
   Box,
-  Heading,
-  VStack,
   Button,
   Alert,
   AlertIcon,
   AlertTitle,
   Image,
+  Text,
+  Flex,
 } from '@chakra-ui/react'
 import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { socket } from '../store/socket'
 import { RoomInfo } from 'types'
 import Popup from './Popup'
+import Wrapper from './waitingRoom/Wrapper'
+import Header from './waitingRoom/GameHeader'
+import RoomListWrapper from './waitingRoom/RoomListItems'
+import Main from './waitingRoom/RoomList'
 
 const defaultRoomInfo: RoomInfo = {
   name: '',
@@ -86,54 +90,96 @@ export default function WaitingRoom() {
         </Alert>
       ) : null}
       <Box
-        p="4"
-        bg="gray.50"
+        maxW="375px"
         minH="100vh"
+        my="0"
+        mx="auto"
         display="flex"
-        alignItems="center"
-        justifyContent="center"
+        flexDir="column"
       >
         <Box
-          w="375px"
-          minH="387px"
+          h="387px"
           bg="white"
-          p="6"
-          borderRadius="md"
-          boxShadow="md"
-          textAlign="center"
-          bgImage="/images/bgMainScreen.png"
+          px="6"
+          pt="14"
+          bgImg="/images/bgMainScreen.png"
           bgSize="cover"
         >
-          <Box boxSize="sm">
-            <Image maxW="222px" src="/images/GameTitle.png" alt="chiken race" />
-          </Box>{' '}
-          <hr />
-          <VStack spacing="4" align="stretch">
-            <Button onClick={makeNewRoom} colorScheme="blue" mt="4">
-              방만들기
-            </Button>
-            {roomList.map((room, idx) => (
-              <Button
-                key={idx}
-                minWidth="max-content"
-                alignItems="center"
-                gap="2"
-                onClick={() => openPwCheckPopup(room)}
-              >
-                <Box p="2" w="70%">
-                  <Heading size="md" textAlign="left">
-                    {room.name}
-                  </Heading>
+          <Image
+            borderColor="transparent"
+            maxW="328px"
+            src="/images/GameTitle.png"
+            alt="chiken race"
+            mb={4}
+          />
+          <Button
+            bgImg="/images/btnBuildRoom.png"
+            onClick={makeNewRoom}
+            bgSize="cover"
+            w="222px"
+            h="81px"
+            bgColor="transparent"
+            _hover={{ bgImg: '/images/btnBuildRoom.png' }}
+            _active={{ bgImg: '/images/btnBuildRoomPush.png' }}
+          ></Button>
+        </Box>
+        <Main roomList={roomList} />
+        <Box flex="1" px={3}>
+          <Text
+            fontFamily="KoreanYNMYTB"
+            fontWeight="400"
+            fontSize="md"
+            textAlign="left"
+            color="#fff"
+          >
+            방 목록(3)
+          </Text>
+          {roomList.length ? (
+            <Box bgColor="#FAF0D1" p={1}>
+              <Box bgColor="#EFAF6F" p={1}>
+                <Box bgColor="#DF9A59" p={1}>
+                  {roomList.map((room, idx) => (
+                    <Flex bgImg="/images/bgRoomList.png" h="72px">
+                      <Box flex="2.5" w="243px" h="72px" px={2.5} py={4}>
+                        <Box
+                          w="74px"
+                          h="16px"
+                          bgColor="#069CD8"
+                          mb={1.5}
+                          borderRadius="md"
+                        >
+                          <Text fontSize="10px" color="#fff">
+                            공개 : {room.count}/{room.people} 입장
+                          </Text>
+                        </Box>
+                        <Box w="160px" h="18px">
+                          <Text fontSize="14px" align="left">
+                            {room.name}
+                          </Text>
+                        </Box>
+                      </Box>
+                      <Flex
+                        alignItems="center"
+                        justifyContent="center"
+                        flex="1"
+                        bgImg="/images/bgEnterRoom.png"
+                      >
+                        <Button
+                          key={idx}
+                          w="73px"
+                          h="42px"
+                          bgImg="/images/btnToEnter.png"
+                          _hover={{ bgImg: '/images/btnToEnter.png' }}
+                          _active={{ bgImg: '/images/btnToEnterPush.png' }}
+                          onClick={() => openPwCheckPopup(room)}
+                        ></Button>
+                      </Flex>
+                    </Flex>
+                  ))}
                 </Box>
-                <Box w="1px" h="100%" bgColor="blackAlpha.300" />
-                <Box p="2">
-                  <Heading size="md">
-                    {room.count} / {room.people}
-                  </Heading>
-                </Box>
-              </Button>
-            ))}
-          </VStack>
+              </Box>
+            </Box>
+          ) : null}
         </Box>
         <Popup
           open={openPwPopup}
