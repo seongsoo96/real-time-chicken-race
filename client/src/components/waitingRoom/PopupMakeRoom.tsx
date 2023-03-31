@@ -1,4 +1,3 @@
-import { Input, Text } from '@chakra-ui/react'
 import React, { useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { socket } from '../../store/socket'
@@ -21,8 +20,8 @@ export default function MakeRoomPopup() {
     bgc2: '#86BBD7',
     bgc3: '#71AAC6',
     mt: '192px',
-    img: '/images/btnConfirmBlue.png',
-    imgPush: '/images/btnConfirmBluePush.png',
+    img: '/images/waitingRoom/btnConfirmBlue.png',
+    imgPush: '/images/waitingRoom/btnConfirmBluePush.png',
   }
 
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {

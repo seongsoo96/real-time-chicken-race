@@ -39,8 +39,8 @@ export default function PopupPassword() {
     bgc2: '#EFAF6F',
     bgc3: '#DF9A59',
     mt: '240px',
-    img: '/images/btnConfirmRed.png',
-    imgPush: '/images/btnConfirmRedPush.png',
+    img: '/images/waitingRoom/btnConfirmRed.png',
+    imgPush: '/images/waitingRoom/btnConfirmRedPush.png',
   }
 
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {

@@ -3,7 +3,7 @@ import { GlobalLayoutProps } from 'types'
 
 export default function GlobalLayout({ children }: GlobalLayoutProps) {
   return (
-    <Box h="100vh" bg="#323B38" textAlign="center">
+    <Box h="100vh" bg="#fff" textAlign="center">
       {children}
     </Box>
   )

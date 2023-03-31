@@ -21,25 +21,25 @@ export default function GameHeader() {
         bg="white"
         px="6"
         pt="14"
-        bgImg="/images/bgMainScreen.png"
+        bgImg="/images/waitingRoom/bgMainScreen.png"
         bgSize="cover"
       >
         <Image
           borderColor="transparent"
           maxW="328px"
-          src="/images/GameTitle.png"
+          src="/images/waitingRoom/GameTitle.png"
           alt="chiken race"
           mb={4}
         />
         <Button
-          bgImg="/images/btnBuildRoom.png"
+          bgImg="/images/waitingRoom/btnBuildRoom.png"
           onClick={makeNewRoom}
           bgSize="cover"
           w="222px"
           h="81px"
           bgColor="transparent"
-          _hover={{ bgImg: '/images/btnBuildRoom.png' }}
-          _active={{ bgImg: '/images/btnBuildRoomPush.png' }}
+          _hover={{ bgImg: '/images/waitingRoom/btnBuildRoom.png' }}
+          _active={{ bgImg: '/images/waitingRoom/btnBuildRoomPush.png' }}
         ></Button>
       </Box>
       <MakeRoomPopup />

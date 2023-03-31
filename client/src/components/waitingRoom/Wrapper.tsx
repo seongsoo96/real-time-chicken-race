@@ -5,6 +5,7 @@ export default function Wrapper({ children }: any) {
     <Box
       maxW="375px"
       minH="100vh"
+      bgColor="#323B38"
       my="0"
       mx="auto"
       display="flex"

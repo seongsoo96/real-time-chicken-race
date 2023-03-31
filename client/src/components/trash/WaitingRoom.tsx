@@ -102,25 +102,25 @@ export default function WaitingRoom() {
           bg="white"
           px="6"
           pt="14"
-          bgImg="/images/bgMainScreen.png"
+          bgImg="/images/waitingRoom/bgMainScreen.png"
           bgSize="cover"
         >
           <Image
             borderColor="transparent"
             maxW="328px"
-            src="/images/GameTitle.png"
+            src="/images/waitingRoom/GameTitle.png"
             alt="chiken race"
             mb={4}
           />
           <Button
-            bgImg="/images/btnBuildRoom.png"
+            bgImg="/images/waitingRoom/btnBuildRoom.png"
             onClick={makeNewRoom}
             bgSize="cover"
             w="222px"
             h="81px"
             bgColor="transparent"
-            _hover={{ bgImg: '/images/btnBuildRoom.png' }}
-            _active={{ bgImg: '/images/btnBuildRoomPush.png' }}
+            _hover={{ bgImg: '/images/waitingRoom/btnBuildRoom.png' }}
+            _active={{ bgImg: '/images/waitingRoom/btnBuildRoomPush.png' }}
           ></Button>
         </Box>
         <Main roomList={roomList} />
@@ -139,7 +139,7 @@ export default function WaitingRoom() {
               <Box bgColor="#EFAF6F" p={1}>
                 <Box bgColor="#DF9A59" p={1}>
                   {roomList.map((room, idx) => (
-                    <Flex bgImg="/images/bgRoomList.png" h="72px">
+                    <Flex bgImg="/images/waitingRoom/bgRoomList.png" h="72px">
                       <Box flex="2.5" w="243px" h="72px" px={2.5} py={4}>
                         <Box
                           w="74px"
@@ -162,15 +162,19 @@ export default function WaitingRoom() {
                         alignItems="center"
                         justifyContent="center"
                         flex="1"
-                        bgImg="/images/bgEnterRoom.png"
+                        bgImg="/images/waitingRoom/bgEnterRoom.png"
                       >
                         <Button
                           key={idx}
                           w="73px"
                           h="42px"
-                          bgImg="/images/btnToEnter.png"
-                          _hover={{ bgImg: '/images/btnToEnter.png' }}
-                          _active={{ bgImg: '/images/btnToEnterPush.png' }}
+                          bgImg="/images/waitingRoom/btnToEnter.png"
+                          _hover={{
+                            bgImg: '/images/waitingRoom/btnToEnter.png',
+                          }}
+                          _active={{
+                            bgImg: '/images/waitingRoom/btnToEnterPush.png',
+                          }}
                           onClick={() => openPwCheckPopup(room)}
                         ></Button>
                       </Flex>
