@@ -13,8 +13,8 @@ import {
 } from '@chakra-ui/react'
 import React, { FormEvent, useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { socket } from '../store/socket'
-import Popup from './Popup'
+import { socket } from '../../store/socket'
+import Popup from './Popupssssfsdfasd'
 import { FormState } from 'types'
 
 const defaultFormState: FormState = {

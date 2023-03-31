@@ -1,6 +1,6 @@
 import { createBrowserRouter, RouterProvider } from 'react-router-dom'
 import GlobalLayout from './components/GlobalLayout'
-import MakeNewRoom from './components/MakeNewRoom'
+import MakeNewRoom from './components/trash/MakeNewRoom'
 import Room from './components/Room'
 import WaitingRoom from './pages/WaitingRoom'
 

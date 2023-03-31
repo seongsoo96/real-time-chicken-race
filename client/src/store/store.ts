@@ -39,12 +39,17 @@ export const useOpenMakeRoomPopupStore = create<OpenMakeRoomPopupState>(
 
 type OpenNickPopupState = {
   openNickPopup: boolean
-  setOpenNickPopup: (value: boolean) => void
+  type: 'new' | 'enter' | ''
+  setOpenNickPopup: (value: {
+    openNickPopup: boolean
+    type: 'new' | 'enter' | ''
+  }) => void
 }
 
 export const useOpenNickPopupStore = create<OpenNickPopupState>((set) => ({
   openNickPopup: false,
-  setOpenNickPopup: (value: boolean) => set({ openNickPopup: value }),
+  type: '',
+  setOpenNickPopup: (value) => set({ ...value }),
 }))
 
 const defaultFormState: FormState = {

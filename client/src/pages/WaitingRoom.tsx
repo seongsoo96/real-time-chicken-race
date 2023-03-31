@@ -6,14 +6,13 @@ import { RoomInfo } from 'types'
 import GameHeader from '../components/waitingRoom/GameHeader'
 import RoomList from '../components/waitingRoom/RoomList'
 import Wrapper from '../components/waitingRoom/Wrapper'
-import Popup from '../components/Popup'
 import {
   useOpenNickPopupStore,
   useOpenPwPopupStore,
   useRoomStore,
 } from '../store/store'
-import PasswordPopup from '../components/common/PasswordPopup'
-import NickNamePopup from '../components/common/NickNamePopup'
+import PasswordPopup from '../components/waitingRoom/PopupPassword'
+import NickNamePopup from '../components/waitingRoom/PopupNickName'
 
 export default function WaitingRoom() {
   const { openNickPopup, setOpenNickPopup } = useOpenNickPopupStore()
@@ -23,20 +22,6 @@ export default function WaitingRoom() {
   const [error, setError] = useState('')
   const navigate = useNavigate()
 
-  const checkPassword = (password: string) => {
-    socket.emit('pw_check', { ...room, password })
-  }
-
-  const handleNickNameSetting = (nick: string) => {
-    socket.emit('nick_name', {
-      id: socket.id,
-      nickName: nick,
-      name: room.name,
-      password: '',
-      people: 0,
-    })
-  }
-
   useEffect(() => {
     socket.listen('room_list', (list) => {
       setRoomList(list)
@@ -45,7 +30,7 @@ export default function WaitingRoom() {
     socket.on('pw_check_ok', () => {
       console.log('?????')
       setOpenPwPopup(false)
-      setOpenNickPopup(true)
+      setOpenNickPopup({ openNickPopup: true, type: 'enter' })
     })
     socket.on('navigate', (roomName) => {
       console.log('roomName ::: ', roomName)
@@ -57,7 +42,7 @@ export default function WaitingRoom() {
       if (err.type === 'pw_check') {
         setOpenPwPopup(false)
       } else if (err.type === 'nick_check') {
-        setOpenNickPopup(false)
+        // setOpenNickPopup(false)
       }
     })
     return () => {

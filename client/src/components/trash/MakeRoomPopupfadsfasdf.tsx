@@ -1,8 +1,6 @@
 import {
   Box,
   Button,
-  FormControl,
-  FormLabel,
   Input,
   Modal,
   ModalBody,
@@ -11,13 +9,11 @@ import {
   ModalFooter,
   ModalHeader,
   ModalOverlay,
-  NumberInput,
-  NumberInputField,
   useDisclosure,
+  Text,
 } from '@chakra-ui/react'
-import React, { FormEvent, useEffect, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { FormState } from 'types'
 import { socket } from '../../store/socket'
 import {
   useFormStateStore,
@@ -25,37 +21,28 @@ import {
   useOpenNickPopupStore,
 } from '../../store/store'
 
-// const defaultFormState: FormState = {
-//   name: '',
-//   password: '',
-//   people: 0,
-// }
-
 export default function MakeRoomPopup() {
-  const { isOpen, onOpen, onClose } = useDisclosure()
-  const { openMakeRoomPopup, setOpenMakeRoomPopup } =
-    useOpenMakeRoomPopupStore()
+  const { onClose } = useDisclosure()
+  const { openMakeRoomPopup } = useOpenMakeRoomPopupStore()
 
   const setOpenNickPopup = useOpenNickPopupStore(
     (state) => state.setOpenNickPopup,
   )
 
   const navigate = useNavigate()
-  const [errorMessage] = useState('')
-  const [openPopup, setOpenPopup] = useState(false)
-  // const [formState, setFormState] = useState<FormState>(defaultFormState)
 
   const { formState, setFormState } = useFormStateStore()
 
   const handleInputChange = (
     event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
   ) => {
+    console.log(event.target.name)
     const { name, value } = event.target
     setFormState({ ...formState, [name]: value })
   }
 
   const handleClick = () => {
-    setOpenNickPopup(true)
+    setOpenNickPopup({ openNickPopup: true, type: 'new' })
   }
 
   const handleNickNameSetting = (nick: string) => {
@@ -89,36 +76,32 @@ export default function MakeRoomPopup() {
               <ModalHeader>Modal Title</ModalHeader>
               <ModalCloseButton />
               <ModalBody>
-                <FormControl id="name" isRequired>
-                  <FormLabel>방이름</FormLabel>
-                  <Input
-                    type="text"
-                    name="name"
-                    value={formState.name}
-                    onChange={handleInputChange}
-                  />
-                </FormControl>
+                <Text>방이름</Text>
+                <Input
+                  type="text"
+                  name="name"
+                  value={formState.name}
+                  onChange={handleInputChange}
+                  placeholder={`방이름을 입력해주세요.`}
+                />
 
-                <FormControl id="password" isRequired>
-                  <FormLabel>비밀번호</FormLabel>
-                  <Input
-                    type="text"
-                    name="password"
-                    value={formState.password}
-                    onChange={handleInputChange}
-                  />
-                </FormControl>
+                <Text>비밀번호</Text>
+                <Input
+                  type="text"
+                  name="password"
+                  value={formState.password}
+                  onChange={handleInputChange}
+                  placeholder={`비밀번호를 입력해주세요.`}
+                />
 
-                <FormControl id="people" isRequired>
-                  <FormLabel>인원수</FormLabel>
-                  <NumberInput defaultValue={4} max={4} min={1}>
-                    <NumberInputField
-                      name="people"
-                      value={formState.people}
-                      onChange={handleInputChange}
-                    />
-                  </NumberInput>
-                </FormControl>
+                <Text>인원수</Text>
+                <Input
+                  type="text"
+                  name="people"
+                  value={formState.people}
+                  onChange={handleInputChange}
+                  placeholder={`인원수을 입력해주세요.`}
+                />
               </ModalBody>
               <ModalFooter>
                 <Button mt={4} colorScheme="blue" onClick={handleClick}>
