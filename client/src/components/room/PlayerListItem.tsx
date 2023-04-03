@@ -1,38 +1,61 @@
-import React from 'react'
-import { Flex, Button, Box, Text } from '@chakra-ui/react'
+import { Flex, Box, Text, Img } from '@chakra-ui/react'
+import { MouseEvent, ReactNode } from 'react'
 import { PlayerInfo, RoomInfo } from 'types'
-import { useOpenPwPopupStore, useRoomStore } from '../../store/store'
+import BgChicken from './BgChicken'
 
 type Props = {
-  info: PlayerInfo | RoomInfo
-  idx: number
+  // info: PlayerInfo | RoomInfo
+  // idx: number
+  mainIcon?: string
+  description: ReactNode
+  buttonIcon: string
+  onButtonClick?: (event?: MouseEvent<HTMLDivElement>) => void
 }
 
-export default function PlayerListItem({ info, idx }: Props) {
+export default function PlayerListItem({
+  buttonIcon,
+  description,
+  mainIcon,
+  onButtonClick,
+}: Props) {
   return (
-    <Flex bgImg="/images/waitingRoom/bgRoomList.png" h="72px">
-      <Box flex="2.5" w="243px" h="72px" px={2.5} py={4}>
-        <Box w="74px" h="16px" bgColor="#069CD8" mb={1.5} borderRadius="md">
-          <Text fontSize="10px" color="#fff"></Text>
+    <Flex bgImg="" h="72px">
+      {mainIcon ? (
+        <Box w="72px" px="5px" py="8px" bgImg="/images/room/bgChicken.png">
+          <Box
+            h="full"
+            bgColor="#fff"
+            pos="relative"
+            opacity="0.5"
+            px="9px"
+            py="6px"
+          >
+            <BgChicken color="blue" />
+            <Img pos="absolute" src={main} />
+          </Box>
         </Box>
-        <Box w="160px" h="18px">
-          <Text fontSize="14px" align="left"></Text>
-        </Box>
+      ) : null}
+      <Box flex="1" px="12px" py="15.5px" bgImg="/images/room/bgList.png">
+        {description}
+        {/* <Text fontSize="14px" align="left">
+          홍길동
+        </Text>
+        <Text fontSize="14px" align="left">
+          28,000km
+        </Text> */}
       </Box>
-      <Flex
-        alignItems="center"
-        justifyContent="center"
-        flex="1"
-        bgImg="/images/waitingRoom/bgEnterRoom.png"
+
+      <Box
+        w="72px"
+        p="7px"
+        bgImg="/images/room/bgBadge.png"
+        onClick={(event) => onButtonClick && onButtonClick(event)}
       >
-        <Button
-          w="73px"
-          h="42px"
-          bgImg="/images/waitingRoom/btnToEnter.png"
-          _hover={{ bgImg: '/images/waitingRoom/btnToEnter.png' }}
-          _active={{ bgImg: '/images/waitingRoom/btnToEnterPush.png' }}
-        ></Button>
-      </Flex>
+        <Img
+          src={buttonIcon ? buttonIcon : '/images/room/badgeRed.png'}
+          alt="badge-red"
+        />
+      </Box>
     </Flex>
   )
 }

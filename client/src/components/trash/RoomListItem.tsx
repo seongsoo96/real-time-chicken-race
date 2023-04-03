@@ -1,18 +1,18 @@
 import { Flex, Button, Box, Text } from '@chakra-ui/react'
-import { RoomInfo } from 'types'
+import { PlayerInfo, RoomInfo } from 'types'
 import { useOpenPwPopupStore, useRoomStore } from '../../store/store'
 
 type Props = {
-  room: RoomInfo
+  info: RoomInfo | PlayerInfo
   idx: number
 }
 
-export default function RoomListItem({ room, idx }: Props) {
+export default function RoomListItem({ info, idx }: Props) {
   const setRoom = useRoomStore((state) => state.setRoom)
   const setOpenPwPopup = useOpenPwPopupStore((state) => state.setOpenPwPopup)
 
-  const openPwCheckPopup = (room: RoomInfo) => {
-    setRoom(room)
+  const openPwCheckPopup = (info: RoomInfo) => {
+    setRoom(info)
     setOpenPwPopup(true)
   }
 
@@ -21,12 +21,12 @@ export default function RoomListItem({ room, idx }: Props) {
       <Box flex="2.5" w="243px" h="72px" px={2.5} py={4}>
         <Box w="74px" h="16px" bgColor="#069CD8" mb={1.5} borderRadius="md">
           <Text fontSize="10px" color="#fff">
-            공개 : {room.count}/{room.people} 입장
+            공개 : {info?.count}/{info?.people} 입장
           </Text>
         </Box>
         <Box w="160px" h="18px">
           <Text fontSize="14px" align="left">
-            {room.name}
+            {info?.name}
           </Text>
         </Box>
       </Box>
@@ -43,7 +43,7 @@ export default function RoomListItem({ room, idx }: Props) {
           bgImg="/images/waitingRoom/btnToEnter.png"
           _hover={{ bgImg: '/images/waitingRoom/btnToEnter.png' }}
           _active={{ bgImg: '/images/waitingRoom/btnToEnterPush.png' }}
-          onClick={() => openPwCheckPopup(room)}
+          onClick={() => openPwCheckPopup(info)}
         ></Button>
       </Flex>
     </Flex>

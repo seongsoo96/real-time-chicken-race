@@ -10,6 +10,12 @@ export type RoomInfo = {
   count: number
 }
 
+export type ListItemProps = {
+  mainIcon: string
+  description: ReactNode
+  buttonIcon: string
+}
+
 export type RoomInfoWithPw = RoomInfo & {
   password: string
 }
