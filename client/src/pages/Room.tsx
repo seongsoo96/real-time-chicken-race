@@ -1,33 +1,42 @@
-import { Box, Divider, UnorderedList, Text, Img } from '@chakra-ui/react'
+import { Box } from '@chakra-ui/react'
 import { useEffect, useState } from 'react'
-import { useNavigate } from 'react-router-dom'
 import { socket } from '../store/socket'
 import { PlayerInfo, RoomInfo } from 'types'
 import Wrapper from '../components/waitingRoom/Wrapper'
-import List from '../components/trash/List'
 import ListItems from '../components/common/ListItems'
 import ListItem from '../components/common/ListItem'
-import PlayerListItem from '../components/room/PlayerListItem'
+import RankCircle from '../components/room/RankCircle'
+import PlayerItemInfo from '../components/room/PlayerItemInfo'
+import { useNavigate } from 'react-router-dom'
 
-const roomInfoDefault: RoomInfo = { name: '', people: 0, count: 0 }
-const myInfoDefault: PlayerInfo = { id: '', nickName: '' }
+const myInfoDefault: PlayerInfo = { id: '', nickName: '', color: '#FFFFFF' }
 export default function Room() {
   const navigate = useNavigate()
   const [myInfo, setMyInfo] = useState<PlayerInfo>(myInfoDefault)
   const [othersInfo, setOthersInfo] = useState<PlayerInfo[]>([])
-  const [playerList, setPlayerList] = useState<PlayerInfo[]>([myInfoDefault])
-  const [roomInfo, setRoomInfo] = useState<RoomInfo>(roomInfoDefault)
 
   useEffect(() => {
+    const handleBeforeUnload = () => {
+      console.log('handleBeforeUnload가 뭔데ㅔㅔㅔㅔㅔ')
+      socket.emit('user_leaving')
+    }
+    window.addEventListener('beforeunload', handleBeforeUnload)
+
     socket.listen('room_enter', (room: RoomInfo, list: PlayerInfo[]) => {
       console.log(`${socket.id}가 방 '${room.name}'에 입장했습니다.`)
       console.log(`playerList :::`, list)
-      setRoomInfo({ ...room })
-      setPlayerList(list)
       setMyInfo(list.filter((player) => player.id === socket.id)[0])
       setOthersInfo(list.filter((player) => player.id !== socket.id))
     })
+
+    return () => {
+      window.removeEventListener('beforeunload', handleBeforeUnload)
+    }
   }, [])
+  socket.on('disconnect', () => {
+    console.log('흠..... 왜 안되지..?')
+    navigate('/')
+  })
 
   return (
     <Wrapper>
@@ -41,42 +50,16 @@ export default function Room() {
       ></Box>
       <ListItems>
         <ListItem
-          option={{ color: 'blue', src: '/images/room/chicken.png' }}
-          description={
-            <>
-              <Text fontSize="14px" align="left">
-                {myInfo.nickName ? myInfo.nickName : '나나나'}
-              </Text>
-              <Text fontSize="14px" align="left">
-                28,000km
-              </Text>
-            </>
-          }
-          rightBox={
-            <Box w="72px" p="7px" bgImg="/images/room/bgBadge.png">
-              <Img src="/images/room/badgeBlue.png" alt="badge-blue" />
-            </Box>
-          }
+          option={{ color: myInfo.color, src: '/images/room/chicken.png' }}
+          info={<PlayerItemInfo info={myInfo} />}
+          rightBox={<RankCircle imgName="badgeBlue" />}
         />
         {othersInfo.map((player, idx) => (
           <ListItem
             key={idx}
-            option={{ color: 'blue', src: '/images/room/chicken.png' }}
-            description={
-              <>
-                <Text fontSize="14px" align="left">
-                  {player.nickName ? player.nickName : '홍길동'}
-                </Text>
-                <Text fontSize="14px" align="left">
-                  28,000km
-                </Text>
-              </>
-            }
-            rightBox={
-              <Box w="72px" p="7px" bgImg="/images/room/bgBadge.png">
-                <Img src="/images/room/badgeRed.png" alt="badge-red" />
-              </Box>
-            }
+            option={{ color: player.color, src: '/images/room/chicken.png' }}
+            info={<PlayerItemInfo info={player} />}
+            rightBox={<RankCircle imgName="badgeRed" />}
           />
         ))}
       </ListItems>

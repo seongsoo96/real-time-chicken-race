@@ -1,29 +1,17 @@
 import {
-  Modal,
-  ModalOverlay,
-  ModalContent,
-  ModalHeader,
-  ModalCloseButton,
-  ModalBody,
-  ModalFooter,
-  Button,
-  useDisclosure,
-  Input,
-  Box,
-  Text,
-} from '@chakra-ui/react'
-import React, { useEffect, useState } from 'react'
-import { socket } from '../../store/socket'
-import {
   useFormStateStore,
   useOpenNickPopupStore,
   useRoomStore,
 } from '../../store/store'
+import React, { useState } from 'react'
+import { socket } from '../../store/socket'
 import Popup from '../common/Popup'
 import PopupInput from '../common/PopupInput'
+import PopupRadio from '../common/PopupRadio'
 
 export default function PopupNickName() {
-  const [value, setValue] = useState('')
+  const [nickName, setNickName] = useState('')
+  const [color, setColor] = useState('')
   const { openNickPopup, type, setOpenNickPopup } = useOpenNickPopupStore()
   const { formState, setFormState } = useFormStateStore()
   const { room, setRoom } = useRoomStore()
@@ -37,14 +25,24 @@ export default function PopupNickName() {
   }
 
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setValue(event.target.value)
+    setNickName(event.target.value)
+  }
+
+  const handleColorChange = (color: string) => {
+    setColor(color)
   }
 
   const handleClick = () => {
+    console.log('handleClick :::: ')
+    console.log('type ::: ', type)
+    console.log('formState ::: ', formState)
+    console.log('room ::: ', room)
+
     if (type === 'new') {
       socket.emit('nick_name', {
         id: socket.id,
-        nickName: value,
+        nickName: nickName,
+        color: color,
         ...formState,
       })
       setFormState({
@@ -55,18 +53,19 @@ export default function PopupNickName() {
     } else if (type === 'enter') {
       socket.emit('nick_name', {
         id: socket.id,
-        nickName: value,
+        nickName: nickName,
+        color: color,
         name: room.name,
         people: room.people,
         password: '',
       })
-      setRoom({
-        name: '',
-        people: 0,
-        count: 0,
-      })
+      // setRoom({
+      //   name: '',
+      //   people: 0,
+      //   count: 0,
+      // })
     }
-    setValue('')
+    setNickName('')
   }
 
   const handlePopupClose = () => {
@@ -84,9 +83,10 @@ export default function PopupNickName() {
         title="닉네임"
         type="text"
         name="nick_name"
-        value={value}
+        value={nickName}
         func={handleInputChange}
       />
+      <PopupRadio func={handleColorChange} />
     </Popup>
   )
 }

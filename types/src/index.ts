@@ -10,6 +10,12 @@ export type RoomInfo = {
   count: number
 }
 
+export type PlayerInfo = {
+  id: string
+  nickName: string
+  color: string
+}
+
 export type ListItemProps = {
   mainIcon: string
   description: ReactNode
@@ -40,12 +46,10 @@ export type ClientToServerEvents = {
   room_new: (formState: FormState) => void
   room_enter: (roomName: string) => void
   pw_check: (args: RoomInfo & { password: string }) => void
-  nick_name: (args: { id: string; nickName: string } & FormState) => void
-}
-
-export type PlayerInfo = {
-  id: string
-  nickName: string
+  nick_name: (
+    args: { id: string; nickName: string; color: string } & FormState
+  ) => void
+  user_leaving: () => void
 }
 
 export type SocketErrorMessage = {

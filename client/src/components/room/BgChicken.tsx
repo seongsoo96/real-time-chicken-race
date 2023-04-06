@@ -1,11 +1,6 @@
 import { Icon } from '@chakra-ui/react'
-import { ReactNode } from 'react'
 
-type Props = {
-  color: string
-}
-
-export default function BgChicken({ color }: Props) {
+export default function BgChicken({ color }: { color: string }) {
   return (
     <Icon
       w="44px"

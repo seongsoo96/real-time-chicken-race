@@ -1,16 +1,11 @@
 import { Box, Image, Button } from '@chakra-ui/react'
-import { useState } from 'react'
-import { useNavigate } from 'react-router-dom'
 import { useOpenMakeRoomPopupStore } from '../../store/store'
 import NickNamePopup from './PopupNickName'
 import MakeRoomPopup from './PopupMakeRoom'
 
 export default function GameHeader() {
-  const { openMakeRoomPopup, setOpenMakeRoomPopup } =
-    useOpenMakeRoomPopupStore()
-  const navigate = useNavigate()
+  const { setOpenMakeRoomPopup } = useOpenMakeRoomPopupStore()
   const makeNewRoom = () => {
-    // navigate('/makeNewRoom')
     setOpenMakeRoomPopup(true)
   }
 

@@ -1,6 +1,4 @@
 import { Button, Flex } from '@chakra-ui/react'
-import React from 'react'
-import { RoomInfo } from 'types'
 
 type Props = {
   func: () => void

@@ -85,8 +85,10 @@ function leaveRoom(socket) {
         console.log("leaveRoom room ::: ", room)
       }
     }
-    socket.emit("navigate", "/")
+    console.log("이거 되려나....~~~")
     socket.leave(roomName)
+    console.log("disconnectdddddd")
+    socket.disconnect()
   }
 }
 
@@ -183,7 +185,7 @@ io.on("connection", (socket) => {
 
   // 방 생성 or 방 입장 시 닉네임 중복체크
   socket.on("nick_name", (obj) => {
-    const { id, nickName, name, password, people } = obj
+    const { id, nickName, color, name, password, people } = obj
     console.log("obj :::: ", obj)
     if (nickNameList.find((nick) => nick === nickName)) {
       const error: SocketErrorMessage = {
@@ -193,7 +195,7 @@ io.on("connection", (socket) => {
       socket.emit("error", error)
     } else {
       nickNameList.push(nickName)
-      playerList.push({ id, nickName })
+      playerList.push({ id, nickName, color })
       if (password) {
         roomNew(socket, { name, password, people })
       } else {
@@ -214,8 +216,11 @@ io.on("connection", (socket) => {
       console.log(socket.rooms)
       return
     }
-
     enterRoom(socket, roomName)
+  })
+
+  socket.on("user_leaving", () => {
+    leaveRoom(socket)
   })
 
   // 새로고침이나 방 나갈 때

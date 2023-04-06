@@ -1,34 +1,8 @@
-import {
-  Modal,
-  ModalOverlay,
-  ModalContent,
-  ModalHeader,
-  ModalCloseButton,
-  ModalBody,
-  ModalFooter,
-  Button,
-  useDisclosure,
-  Input,
-  Box,
-  Text,
-} from '@chakra-ui/react'
-import React, { useEffect, useState } from 'react'
+import { useOpenPwPopupStore, useRoomStore } from '../../store/store'
+import React, { useState } from 'react'
 import { socket } from '../../store/socket'
-import {
-  useFormStateStore,
-  useOpenNickPopupStore,
-  useOpenPwPopupStore,
-  useRoomStore,
-} from '../../store/store'
 import Popup from '../common/Popup'
 import PopupInput from '../common/PopupInput'
-
-interface PopupProps {
-  open?: Boolean
-  func: (value: string) => void
-  type: string
-  title: string
-}
 
 export default function PopupPassword() {
   const [value, setValue] = useState('')

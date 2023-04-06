@@ -1,11 +1,11 @@
-import React, { useEffect } from 'react'
-import { useNavigate } from 'react-router-dom'
-import { socket } from '../../store/socket'
 import {
   useFormStateStore,
   useOpenMakeRoomPopupStore,
   useOpenNickPopupStore,
 } from '../../store/store'
+import React, { useEffect } from 'react'
+import { useNavigate } from 'react-router-dom'
+import { socket } from '../../store/socket'
 import Popup from '../common/Popup'
 import PopupInput from '../common/PopupInput'
 

@@ -1,0 +1,612 @@
+$ nodemon --watch ./*.ts --exec "npm start"
+[33m[nodemon] 2.0.22[39m
+[33m[nodemon] to restart at any time, enter `rs`[39m
+[33m[nodemon] watching path(s): index.ts[39m
+[33m[nodemon] watching extensions: js,mjs,json[39m
+[32m[nodemon] starting `npm start`[39m
+
+> server@1.0.0 start
+> ts-node ./index.ts
+
+✅ listening on port 3001
+Socket event: room_list
+Socket event: room_list
+Socket event: room_list
+Socket event: room_list
+Socket event: room_list
+Socket event: room_list
+Socket event: room_list
+Socket event: room_list
+Socket event: room_list
+Socket event: room_list
+Socket event: nick_name
+obj ::::  {
+  id: 'Q5vtTZnnE99hkvo-AAAB',
+  nickName: 'dd',
+  color: '',
+  name: 'dd',
+  password: 'dd',
+  people: 0
+}
+Socket Q5vtTZnnE99hkvo-AAAB is creating room dd.
+socket.rooms.size :::  Set(1) { 'Q5vtTZnnE99hkvo-AAAB' }
+Socket Q5vtTZnnE99hkvo-AAAB is entering room dd.
+roomName :::  dd
+Socket event: pw_check
+Socket event: nick_name
+obj ::::  {
+  id: '051JRKZEHHtMz5tUAAAJ',
+  nickName: 'ff',
+  color: '',
+  name: 'dd',
+  people: 0,
+  password: ''
+}
+Socket 051JRKZEHHtMz5tUAAAJ is entering room dd.
+roomName :::  dd
+Socket event: pw_check
+Socket event: nick_name
+obj ::::  {
+  id: 'BqYKB-BfoI4WvvB5AAAH',
+  nickName: 'dd',
+  color: '',
+  name: 'dd',
+  people: 0,
+  password: ''
+}
+Socket event: nick_name
+obj ::::  {
+  id: 'BqYKB-BfoI4WvvB5AAAH',
+  nickName: 'ff',
+  color: '',
+  name: 'dd',
+  people: 0,
+  password: ''
+}
+Socket event: nick_name
+obj ::::  {
+  id: 'BqYKB-BfoI4WvvB5AAAH',
+  nickName: 'gg',
+  color: '',
+  name: 'dd',
+  people: 0,
+  password: ''
+}
+Socket BqYKB-BfoI4WvvB5AAAH is entering room dd.
+roomName :::  dd
+Socket BqYKB-BfoI4WvvB5AAAH is disconnecting.
+rooms::  Set(2) { 'BqYKB-BfoI4WvvB5AAAH', 'dd' }
+roomName :::  dd
+Socket BqYKB-BfoI4WvvB5AAAH is leaving room dd.
+countRoom :::  3
+leaveRoom room :::  { name: 'dd', people: 0, count: 3 }
+leaveRoom room :::  { name: 'dd', people: 0, count: 0 }
+Socket uKs7slJeZEAG9a9cAAAL is disconnecting.
+rooms::  Set(1) { 'uKs7slJeZEAG9a9cAAAL' }
+roomName :::  
+Socket uKs7slJeZEAG9a9cAAAL is leaving room .
+[32m[nodemon] restarting due to changes...[39m
+[32m[nodemon] starting `npm start`[39m
+
+> server@1.0.0 start
+> ts-node ./index.ts
+
+✅ listening on port 3001
+Socket mX2vvWNeGoWBRrlRAAAJ is disconnecting.
+rooms::  Set(1) { 'mX2vvWNeGoWBRrlRAAAJ' }
+roomName :::  
+Socket mX2vvWNeGoWBRrlRAAAJ is leaving room .
+Socket sXAyzn6NKiRcbQujAAAF is disconnecting.
+rooms::  Set(1) { 'sXAyzn6NKiRcbQujAAAF' }
+roomName :::  
+Socket sXAyzn6NKiRcbQujAAAF is leaving room .
+Socket bzOBTZ4oRMMx5hNHAAAN is disconnecting.
+rooms::  Set(1) { 'bzOBTZ4oRMMx5hNHAAAN' }
+roomName :::  
+Socket bzOBTZ4oRMMx5hNHAAAN is leaving room .
+Socket event: room_list
+Socket event: room_list
+Socket 8IoPhQ3QjaAEiq45AAAB is disconnecting.
+rooms::  Set(1) { '8IoPhQ3QjaAEiq45AAAB' }
+roomName :::  
+Socket 8IoPhQ3QjaAEiq45AAAB is leaving room .
+Socket event: room_list
+Socket event: room_list
+Socket rOyJ8zPYwKIa1xAiAAAL is disconnecting.
+rooms::  Set(1) { 'rOyJ8zPYwKIa1xAiAAAL' }
+roomName :::  
+Socket rOyJ8zPYwKIa1xAiAAAL is leaving room .
+Socket event: room_list
+Socket event: room_list
+Socket event: nick_name
+obj ::::  {
+  id: 'ydnmkGfKRy1SWjPwAAAP',
+  nickName: 'dd',
+  color: '',
+  name: 'dd',
+  password: 'dd',
+  people: 0
+}
+Socket ydnmkGfKRy1SWjPwAAAP is creating room dd.
+socket.rooms.size :::  Set(1) { 'ydnmkGfKRy1SWjPwAAAP' }
+Socket ydnmkGfKRy1SWjPwAAAP is entering room dd.
+roomName :::  dd
+Socket event: pw_check
+Socket event: nick_name
+obj ::::  {
+  id: 'GvzskHKpaLoVOcNqAAAR',
+  nickName: 'ff',
+  color: '',
+  name: 'dd',
+  people: 0,
+  password: ''
+}
+Socket GvzskHKpaLoVOcNqAAAR is entering room dd.
+roomName :::  dd
+Socket ydnmkGfKRy1SWjPwAAAP is disconnecting.
+rooms::  Set(2) { 'ydnmkGfKRy1SWjPwAAAP', 'dd' }
+roomName :::  dd
+Socket ydnmkGfKRy1SWjPwAAAP is leaving room dd.
+countRoom :::  2
+leaveRoom room :::  { name: 'dd', people: 0, count: 2 }
+leaveRoom room :::  { name: 'dd', people: 0, count: 0 }
+이거 되려나....~~~
+Socket GvzskHKpaLoVOcNqAAAR is disconnecting.
+rooms::  Set(2) { 'GvzskHKpaLoVOcNqAAAR', 'dd' }
+roomName :::  dd
+Socket GvzskHKpaLoVOcNqAAAR is leaving room dd.
+countRoom :::  1
+Remove room dd
+leaveRoom roomList ::  []
+이거 되려나....~~~
+Socket KjdDzqlxIo88TtnTAAAV is disconnecting.
+rooms::  Set(1) { 'KjdDzqlxIo88TtnTAAAV' }
+roomName :::  
+Socket KjdDzqlxIo88TtnTAAAV is leaving room .
+Socket event: room_list
+Socket event: room_list
+Socket -rIZAtHke4dQnG_YAAAX is disconnecting.
+rooms::  Set(1) { '-rIZAtHke4dQnG_YAAAX' }
+roomName :::  
+Socket -rIZAtHke4dQnG_YAAAX is leaving room .
+Socket event: room_list
+Socket event: room_list
+Socket event: nick_name
+obj ::::  {
+  id: 't0N73qfBvG8__W3SAAAZ',
+  nickName: 'ww',
+  color: '',
+  name: 'ww',
+  password: 'ww',
+  people: '3'
+}
+Socket t0N73qfBvG8__W3SAAAZ is creating room ww.
+socket.rooms.size :::  Set(1) { 't0N73qfBvG8__W3SAAAZ' }
+Socket t0N73qfBvG8__W3SAAAZ is entering room ww.
+roomName :::  ww
+Socket event: pw_check
+Socket event: nick_name
+obj ::::  {
+  id: 'uJ8rj618b0HNzg4YAAAb',
+  nickName: 'ee',
+  color: '#F9961F',
+  name: 'ww',
+  people: '3',
+  password: ''
+}
+Socket uJ8rj618b0HNzg4YAAAb is entering room ww.
+roomName :::  ww
+Socket t0N73qfBvG8__W3SAAAZ is disconnecting.
+rooms::  Set(2) { 't0N73qfBvG8__W3SAAAZ', 'ww' }
+roomName :::  ww
+Socket t0N73qfBvG8__W3SAAAZ is leaving room ww.
+countRoom :::  2
+leaveRoom room :::  { name: 'ww', people: '3', count: 2 }
+leaveRoom room :::  { name: 'ww', people: '3', count: 0 }
+이거 되려나....~~~
+Socket uJ8rj618b0HNzg4YAAAb is disconnecting.
+rooms::  Set(2) { 'uJ8rj618b0HNzg4YAAAb', 'ww' }
+roomName :::  ww
+Socket uJ8rj618b0HNzg4YAAAb is leaving room ww.
+countRoom :::  1
+Remove room ww
+leaveRoom roomList ::  []
+이거 되려나....~~~
+Socket uusf5ebYuWJ1TDFzAAAd is disconnecting.
+rooms::  Set(1) { 'uusf5ebYuWJ1TDFzAAAd' }
+roomName :::  
+Socket uusf5ebYuWJ1TDFzAAAd is leaving room .
+Socket event: room_list
+Socket event: room_list
+Socket grHom3kTSIKLr5WrAAAf is disconnecting.
+rooms::  Set(1) { 'grHom3kTSIKLr5WrAAAf' }
+roomName :::  
+Socket grHom3kTSIKLr5WrAAAf is leaving room .
+Socket event: room_list
+Socket event: room_list
+Socket event: nick_name
+obj ::::  {
+  id: 'JBymiDlg-_Kyr-n8AAAh',
+  nickName: 'dd',
+  color: '',
+  name: 'dd',
+  password: 'dd',
+  people: 0
+}
+Socket event: nick_name
+obj ::::  {
+  id: 'JBymiDlg-_Kyr-n8AAAh',
+  nickName: 'gg',
+  color: '',
+  name: '',
+  password: '',
+  people: 0
+}
+Socket JBymiDlg-_Kyr-n8AAAh is entering room .
+roomName :::  
+Socket JBymiDlg-_Kyr-n8AAAh is disconnecting.
+rooms::  Set(2) { 'JBymiDlg-_Kyr-n8AAAh', '' }
+roomName :::  
+Socket JBymiDlg-_Kyr-n8AAAh is leaving room .
+Socket event: room_list
+Socket event: room_list
+Socket event: nick_name
+obj ::::  {
+  id: 'b3qxcgPLBQH7wHEmAAAl',
+  nickName: 'zz',
+  color: '',
+  name: 'zz',
+  password: 'zz',
+  people: 0
+}
+Socket b3qxcgPLBQH7wHEmAAAl is creating room zz.
+socket.rooms.size :::  Set(1) { 'b3qxcgPLBQH7wHEmAAAl' }
+Socket b3qxcgPLBQH7wHEmAAAl is entering room zz.
+roomName :::  zz
+Socket event: pw_check
+Socket event: pw_check
+Socket event: nick_name
+obj ::::  {
+  id: 'PRNSN0fcYTykuHj9AAAj',
+  nickName: 'xx',
+  color: '',
+  name: 'zz',
+  people: 0,
+  password: ''
+}
+Socket PRNSN0fcYTykuHj9AAAj is entering room zz.
+roomName :::  zz
+Socket PRNSN0fcYTykuHj9AAAj is disconnecting.
+rooms::  Set(2) { 'PRNSN0fcYTykuHj9AAAj', 'zz' }
+roomName :::  zz
+Socket PRNSN0fcYTykuHj9AAAj is leaving room zz.
+countRoom :::  2
+leaveRoom room :::  { name: 'zz', people: 0, count: 2 }
+leaveRoom room :::  { name: 'zz', people: 0, count: 0 }
+이거 되려나....~~~
+[32m[nodemon] restarting due to changes...[39m
+[32m[nodemon] starting `npm start`[39m
+
+> server@1.0.0 start
+> ts-node ./index.ts
+
+✅ listening on port 3001
+Socket event: room_list
+Socket event: room_list
+Socket event: room_list
+Socket event: room_list
+[32m[nodemon] restarting due to changes...[39m
+[32m[nodemon] starting `npm start`[39m
+
+> server@1.0.0 start
+> ts-node ./index.ts
+
+✅ listening on port 3001
+Socket Q6dPO4QkuRVaPDXqAAAF is disconnecting.
+rooms::  Set(1) { 'Q6dPO4QkuRVaPDXqAAAF' }
+roomName :::  
+Socket Q6dPO4QkuRVaPDXqAAAF is leaving room .
+Socket event: room_list
+Socket event: room_list
+Socket event: nick_name
+obj ::::  {
+  id: 'B_pN30ov_A-QknkXAAAL',
+  nickName: 'dd',
+  color: '',
+  name: 'dd',
+  password: 'dd',
+  people: 0
+}
+Socket B_pN30ov_A-QknkXAAAL is creating room dd.
+socket.rooms.size :::  Set(1) { 'B_pN30ov_A-QknkXAAAL' }
+Socket B_pN30ov_A-QknkXAAAL is entering room dd.
+roomName :::  dd
+Socket event: pw_check
+Socket event: nick_name
+obj ::::  {
+  id: 'KqhPnpSdGeEbXqDEAAAB',
+  nickName: 'ff',
+  color: '',
+  name: 'dd',
+  people: 0,
+  password: ''
+}
+Socket KqhPnpSdGeEbXqDEAAAB is entering room dd.
+roomName :::  dd
+Socket KqhPnpSdGeEbXqDEAAAB is disconnecting.
+rooms::  Set(2) { 'KqhPnpSdGeEbXqDEAAAB', 'dd' }
+roomName :::  dd
+Socket KqhPnpSdGeEbXqDEAAAB is leaving room dd.
+countRoom :::  2
+leaveRoom room :::  { name: 'dd', people: 0, count: 2 }
+leaveRoom room :::  { name: 'dd', people: 0, count: 0 }
+이거 되려나....~~~
+Socket B_pN30ov_A-QknkXAAAL is disconnecting.
+rooms::  Set(2) { 'B_pN30ov_A-QknkXAAAL', 'dd' }
+roomName :::  dd
+Socket B_pN30ov_A-QknkXAAAL is leaving room dd.
+countRoom :::  1
+Remove room dd
+leaveRoom roomList ::  []
+이거 되려나....~~~
+Socket event: room_list
+Socket event: room_list
+Socket q-BQEQ6OTCKAV79DAAAN is disconnecting.
+rooms::  Set(1) { 'q-BQEQ6OTCKAV79DAAAN' }
+roomName :::  
+Socket q-BQEQ6OTCKAV79DAAAN is leaving room .
+Socket event: room_list
+Socket event: room_list
+Socket event: nick_name
+obj ::::  {
+  id: 'vKViEO79SpgCrMz1AAAP',
+  nickName: 'xx',
+  color: '',
+  name: 'xx',
+  password: 'xx',
+  people: 0
+}
+Socket vKViEO79SpgCrMz1AAAP is creating room xx.
+socket.rooms.size :::  Set(1) { 'vKViEO79SpgCrMz1AAAP' }
+Socket vKViEO79SpgCrMz1AAAP is entering room xx.
+roomName :::  xx
+Socket event: pw_check
+Socket event: nick_name
+obj ::::  {
+  id: 'gErYRmc938e-1ZgkAAAR',
+  nickName: 'cc',
+  color: '',
+  name: 'xx',
+  people: 0,
+  password: ''
+}
+Socket gErYRmc938e-1ZgkAAAR is entering room xx.
+roomName :::  xx
+Socket gErYRmc938e-1ZgkAAAR is disconnecting.
+rooms::  Set(2) { 'gErYRmc938e-1ZgkAAAR', 'xx' }
+roomName :::  xx
+Socket gErYRmc938e-1ZgkAAAR is leaving room xx.
+countRoom :::  2
+leaveRoom room :::  { name: 'xx', people: 0, count: 2 }
+leaveRoom room :::  { name: 'xx', people: 0, count: 0 }
+이거 되려나....~~~
+Socket vKViEO79SpgCrMz1AAAP is disconnecting.
+rooms::  Set(2) { 'vKViEO79SpgCrMz1AAAP', 'xx' }
+roomName :::  xx
+Socket vKViEO79SpgCrMz1AAAP is leaving room xx.
+countRoom :::  1
+Remove room xx
+leaveRoom roomList ::  []
+이거 되려나....~~~
+Socket event: room_list
+Socket event: room_list
+Socket 3hbJARLC3B-Mg_zGAAAT is disconnecting.
+rooms::  Set(1) { '3hbJARLC3B-Mg_zGAAAT' }
+roomName :::  
+Socket 3hbJARLC3B-Mg_zGAAAT is leaving room .
+Socket event: nick_name
+obj ::::  {
+  id: 'PAGP2oaJG0ujIJFrAAAV',
+  nickName: 'bb',
+  color: '',
+  name: 'bb',
+  password: 'bb',
+  people: 0
+}
+Socket PAGP2oaJG0ujIJFrAAAV is creating room bb.
+socket.rooms.size :::  Set(1) { 'PAGP2oaJG0ujIJFrAAAV' }
+Socket PAGP2oaJG0ujIJFrAAAV is entering room bb.
+roomName :::  bb
+Socket event: room_list
+Socket event: room_list
+Socket event: pw_check
+Socket event: nick_name
+obj ::::  {
+  id: 'eTKYIAMAz-b7r-C6AAAX',
+  nickName: 'mm',
+  color: '',
+  name: 'bb',
+  people: 0,
+  password: ''
+}
+Socket eTKYIAMAz-b7r-C6AAAX is entering room bb.
+roomName :::  bb
+Socket eTKYIAMAz-b7r-C6AAAX is disconnecting.
+rooms::  Set(2) { 'eTKYIAMAz-b7r-C6AAAX', 'bb' }
+roomName :::  bb
+Socket eTKYIAMAz-b7r-C6AAAX is leaving room bb.
+countRoom :::  2
+leaveRoom room :::  { name: 'bb', people: 0, count: 2 }
+leaveRoom room :::  { name: 'bb', people: 0, count: 0 }
+이거 되려나....~~~
+[32m[nodemon] restarting due to changes...[39m
+[32m[nodemon] starting `npm start`[39m
+
+> server@1.0.0 start
+> ts-node ./index.ts
+
+✅ listening on port 3001
+Socket event: room_list
+Socket event: room_list
+Socket event: room_list
+Socket event: room_list
+Socket hNudoW2aT9O_shUGAAAI is disconnecting.
+rooms::  Set(1) { 'hNudoW2aT9O_shUGAAAI' }
+roomName :::  
+Socket hNudoW2aT9O_shUGAAAI is leaving room .
+Socket event: room_list
+Socket event: room_list
+Socket event: nick_name
+obj ::::  {
+  id: 'G7VVKbkGN4QJRSaZAAAL',
+  nickName: 'dd',
+  color: '',
+  name: 'dd',
+  password: 'dd',
+  people: 0
+}
+Socket G7VVKbkGN4QJRSaZAAAL is creating room dd.
+socket.rooms.size :::  Set(1) { 'G7VVKbkGN4QJRSaZAAAL' }
+Socket G7VVKbkGN4QJRSaZAAAL is entering room dd.
+roomName :::  dd
+Socket event: pw_check
+Socket event: nick_name
+obj ::::  {
+  id: '11EN8YuJnlrgIyqOAAAJ',
+  nickName: 'ff',
+  color: '',
+  name: 'dd',
+  people: 0,
+  password: ''
+}
+Socket 11EN8YuJnlrgIyqOAAAJ is entering room dd.
+roomName :::  dd
+Socket 11EN8YuJnlrgIyqOAAAJ is disconnecting.
+rooms::  Set(2) { '11EN8YuJnlrgIyqOAAAJ', 'dd' }
+roomName :::  dd
+Socket 11EN8YuJnlrgIyqOAAAJ is leaving room dd.
+countRoom :::  2
+leaveRoom room :::  { name: 'dd', people: 0, count: 2 }
+leaveRoom room :::  { name: 'dd', people: 0, count: 0 }
+이거 되려나....~~~
+Socket G7VVKbkGN4QJRSaZAAAL is disconnecting.
+rooms::  Set(2) { 'G7VVKbkGN4QJRSaZAAAL', 'dd' }
+roomName :::  dd
+Socket G7VVKbkGN4QJRSaZAAAL is leaving room dd.
+countRoom :::  1
+Remove room dd
+leaveRoom roomList ::  []
+이거 되려나....~~~
+Socket event: room_list
+Socket event: room_list
+Socket YdQkUbhE1DCIvxZWAAAN is disconnecting.
+rooms::  Set(1) { 'YdQkUbhE1DCIvxZWAAAN' }
+roomName :::  
+Socket YdQkUbhE1DCIvxZWAAAN is leaving room .
+Socket event: room_list
+Socket event: room_list
+Socket event: nick_name
+obj ::::  {
+  id: 'uy9CFH23Mapw7PSxAAAP',
+  nickName: 'zz',
+  color: '',
+  name: 'zz',
+  password: 'zz',
+  people: 0
+}
+Socket uy9CFH23Mapw7PSxAAAP is creating room zz.
+socket.rooms.size :::  Set(1) { 'uy9CFH23Mapw7PSxAAAP' }
+Socket uy9CFH23Mapw7PSxAAAP is entering room zz.
+roomName :::  zz
+Socket event: pw_check
+Socket event: nick_name
+obj ::::  {
+  id: 'XAiAfxXKolnqCJXCAAAR',
+  nickName: 'xx',
+  color: '',
+  name: 'zz',
+  people: 0,
+  password: ''
+}
+Socket XAiAfxXKolnqCJXCAAAR is entering room zz.
+roomName :::  zz
+Socket XAiAfxXKolnqCJXCAAAR is disconnecting.
+rooms::  Set(2) { 'XAiAfxXKolnqCJXCAAAR', 'zz' }
+roomName :::  zz
+Socket XAiAfxXKolnqCJXCAAAR is leaving room zz.
+countRoom :::  2
+leaveRoom room :::  { name: 'zz', people: 0, count: 2 }
+leaveRoom room :::  { name: 'zz', people: 0, count: 0 }
+이거 되려나....~~~
+[32m[nodemon] restarting due to changes...[39m
+[32m[nodemon] starting `npm start`[39m
+
+> server@1.0.0 start
+> ts-node ./index.ts
+
+✅ listening on port 3001
+Socket event: room_list
+Socket event: room_list
+Socket Ask4zBZ6k8XMqLatAAAC is disconnecting.
+rooms::  Set(1) { 'Ask4zBZ6k8XMqLatAAAC' }
+roomName :::  
+Socket Ask4zBZ6k8XMqLatAAAC is leaving room .
+Socket event: room_list
+Socket event: room_list
+Socket event: room_list
+Socket event: room_list
+Socket Atw3AyN242WlgARNAAAJ is disconnecting.
+rooms::  Set(1) { 'Atw3AyN242WlgARNAAAJ' }
+roomName :::  
+Socket Atw3AyN242WlgARNAAAJ is leaving room .
+Socket event: room_list
+Socket event: room_list
+Socket event: nick_name
+obj ::::  {
+  id: 'UZ_sEK9vt6ESYX-LAAAL',
+  nickName: 'dd',
+  color: '',
+  name: 'dd',
+  password: 'dd',
+  people: 0
+}
+Socket UZ_sEK9vt6ESYX-LAAAL is creating room dd.
+socket.rooms.size :::  Set(1) { 'UZ_sEK9vt6ESYX-LAAAL' }
+Socket UZ_sEK9vt6ESYX-LAAAL is entering room dd.
+roomName :::  dd
+Socket event: pw_check
+Socket event: nick_name
+obj ::::  {
+  id: 'aB_TLqrx8tSOYz2eAAAN',
+  nickName: 'ff',
+  color: '',
+  name: 'dd',
+  people: 0,
+  password: ''
+}
+Socket aB_TLqrx8tSOYz2eAAAN is entering room dd.
+roomName :::  dd
+Socket aB_TLqrx8tSOYz2eAAAN is disconnecting.
+rooms::  Set(2) { 'aB_TLqrx8tSOYz2eAAAN', 'dd' }
+roomName :::  dd
+Socket aB_TLqrx8tSOYz2eAAAN is leaving room dd.
+countRoom :::  2
+leaveRoom room :::  { name: 'dd', people: 0, count: 2 }
+leaveRoom room :::  { name: 'dd', people: 0, count: 0 }
+이거 되려나....~~~
+Socket aB_TLqrx8tSOYz2eAAAN is disconnecting.
+rooms::  Set(1) { 'aB_TLqrx8tSOYz2eAAAN' }
+roomName :::  
+Socket aB_TLqrx8tSOYz2eAAAN is leaving room .
+Socket -TDjiUS9us6swbXWAAAP is disconnecting.
+rooms::  Set(1) { '-TDjiUS9us6swbXWAAAP' }
+roomName :::  
+Socket -TDjiUS9us6swbXWAAAP is leaving room .
+[32m[nodemon] restarting due to changes...[39m
+[32m[nodemon] starting `npm start`[39m
+
+> server@1.0.0 start
+> ts-node ./index.ts
+
+✅ listening on port 3001
+Socket event: room_list
