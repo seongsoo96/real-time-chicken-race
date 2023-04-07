@@ -33,22 +33,12 @@ export default function PopupNickName() {
   }
 
   const handleClick = () => {
-    console.log('handleClick :::: ')
-    console.log('type ::: ', type)
-    console.log('formState ::: ', formState)
-    console.log('room ::: ', room)
-
     if (type === 'new') {
       socket.emit('nick_name_check', {
         id: socket.id,
         nickName: nickName,
         color: color,
         ...formState,
-      })
-      setFormState({
-        name: '',
-        password: '',
-        people: 0,
       })
     } else if (type === 'enter') {
       socket.emit('nick_name_check', {

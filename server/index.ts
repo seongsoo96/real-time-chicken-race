@@ -27,7 +27,7 @@ function checkDuplicateRoomName(name) {
 // 방입장
 function enterRoom(socket: Socket, roomName: string) {
   const room = getRoom(roomName)
-  console.log(`Socket ${socket.id} is entering room ${roomName}.`)
+  console.log(`✅ Socket ${socket.id} is entering room ${roomName}.`)
 
   const player = playerList.filter((player) => player.id === socket.id)[0]
   if (roomData[roomName]) {
@@ -64,7 +64,7 @@ function leaveRoom(socket) {
   // console.log("playerList ::: ", playerList)
   // console.log("roomName ::: ", roomName)
   // console.log("roomData ::: ", roomData)
-  // console.log(`Socket ${socket.id} is leaving room ${roomName}.`)
+  console.log(`✅ Socket ${socket.id} is leaving room ${roomName}.`)
 
   const leavingPlayer = playerList.filter(
     (player) => player.id === socket.id
@@ -77,19 +77,26 @@ function leaveRoom(socket) {
       console.log(`✅ Remove room ${roomName}`)
       roomList = roomList.filter((value) => value.name != roomName)
 
-      // console.log("✅ socket.id ::: ", socket.id)
-      // console.log("✅ roomList ::: ", roomList)
-      // console.log("✅ roomData[roomName] ::: ", roomData[roomName])
+      console.log("✅🔶 socket.id ::: ", socket.id)
+      console.log("✅🔶 roomList ::: ", roomList)
+      console.log("✅🔶 roomData[roomName] ::: ", roomData[roomName])
       roomData[roomName] = []
       io.emit("room_list", roomList)
     } else {
       const room = getRoom(roomName)
       if (room) {
         room.count -= 1
+        // console.log("✅❌ playerList ::: ", playerList)
         playerList = playerList.filter((player) => player.id !== socket.id)
+        // console.log("✅❌ playerList 필터링 후 ::: ", playerList)
         if (roomData[roomName]) {
-          roomData[roomName] = [...playerList]
+          roomData[roomName] = roomData[roomName].filter(
+            (player) => player.id !== socket.id
+          )
         }
+        // console.log("✅❌ socket.id ::: ", socket.id)
+        // console.log("✅❌ roomList ::: ", roomList)
+        // console.log("✅❌ roomData[roomName] ::: ", roomData[roomName])
 
         io.emit("room_list", roomList)
         io.to(roomName).emit("room_update", roomData[roomName])
@@ -115,13 +122,6 @@ function roomNew(socket: Socket, formState: FormState) {
     console.log(`🔶 socket ${socket.id} is already in room.`)
     // console.log(socket.rooms)
     socket.emit("error", "이미 다른 방에 참가중입니다.")
-    return
-  }
-
-  //동일한 방이 존재할 경우
-  if (!checkDuplicateRoomName(roomName)) {
-    console.log(`🔶 Room name ${roomName} already exists.`)
-    socket.emit("error", "동일한 방이 이미 존재합니다.")
     return
   }
 
@@ -155,7 +155,6 @@ io.on("connection", (socket) => {
 
   socket.on("room_name_check", (roomName: string) => {
     const check = checkDuplicateRoomName(roomName)
-    console.log(check)
     socket.emit("room_name_ok", check)
   })
 

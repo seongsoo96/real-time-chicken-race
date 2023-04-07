@@ -35,16 +35,16 @@ export default function WaitingRoom() {
       setRoomList(list)
     })
     socket.emit('room_list')
-    socket.on('pw_check_ok', () => {
+    socket.listen('pw_check_ok', () => {
       console.log('?????')
       setOpenPwPopup(false)
       setOpenNickPopup({ openNickPopup: true, type: 'enter' })
     })
-    socket.on('navigate', (roomName) => {
+    socket.listen('navigate', (roomName) => {
       console.log('roomName ::: ', roomName)
       navigate(`/room/${roomName}`)
     })
-    socket.on('error', (err) => {
+    socket.listen('error', (err) => {
       console.log('err ::: ', err)
       toast({
         title: err.msg,
