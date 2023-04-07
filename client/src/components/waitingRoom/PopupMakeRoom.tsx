@@ -8,6 +8,7 @@ import { useNavigate } from 'react-router-dom'
 import { socket } from '../../store/socket'
 import Popup from '../common/Popup'
 import PopupInput from '../common/PopupInput'
+import { useToast } from '@chakra-ui/react'
 
 export default function MakeRoomPopup() {
   const { openMakeRoomPopup, setOpenMakeRoomPopup } =
@@ -15,6 +16,7 @@ export default function MakeRoomPopup() {
   const { setOpenNickPopup } = useOpenNickPopupStore()
   const navigate = useNavigate()
   const { formState, setFormState } = useFormStateStore()
+  const toast = useToast()
   const css = {
     bgc1: '#E3F1F9',
     bgc2: '#86BBD7',
@@ -31,7 +33,7 @@ export default function MakeRoomPopup() {
   }
 
   const handleClick = () => {
-    setOpenNickPopup({ openNickPopup: true, type: 'new' })
+    socket.emit('room_name_check', formState.name)
   }
 
   const handlePopupClose = () => {
@@ -42,6 +44,19 @@ export default function MakeRoomPopup() {
   useEffect(() => {
     socket.listen('navigate', (name) => {
       navigate(`/room/${name}`)
+    })
+    socket.listen('room_name_ok', (check) => {
+      //중복된 이름의 방이 존재할 경우 false, 없을 경우 true
+      if (check) {
+        setOpenNickPopup({ openNickPopup: true, type: 'new' })
+      } else {
+        toast({
+          title: '방제목 중복입니다.',
+          status: 'error',
+          position: 'top',
+          duration: 2000,
+        })
+      }
     })
   }, [])
 

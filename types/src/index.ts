@@ -35,18 +35,21 @@ export type FormState = {
 export type ServerToClientEvents = {
   room_list: (roomList: RoomInfo[]) => void
   room_enter: (room: RoomInfo, playerList: PlayerInfo[]) => void
+  room_name_ok: (check: boolean) => void
   pw_check_ok: () => void
   nick_name_ok: (formState: FormState) => void
   navigate: (name: string) => void
   error: (message: SocketErrorMessage) => void
+  room_update: (playerList: PlayerInfo[]) => void
 }
 
 export type ClientToServerEvents = {
   room_list: () => void
   room_new: (formState: FormState) => void
+  room_name_check: (roomName: string) => void
   room_enter: (roomName: string) => void
   pw_check: (args: RoomInfo & { password: string }) => void
-  nick_name: (
+  nick_name_check: (
     args: { id: string; nickName: string; color: string } & FormState
   ) => void
   user_leaving: () => void

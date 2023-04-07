@@ -39,7 +39,7 @@ export default function PopupNickName() {
     console.log('room ::: ', room)
 
     if (type === 'new') {
-      socket.emit('nick_name', {
+      socket.emit('nick_name_check', {
         id: socket.id,
         nickName: nickName,
         color: color,
@@ -51,7 +51,7 @@ export default function PopupNickName() {
         people: 0,
       })
     } else if (type === 'enter') {
-      socket.emit('nick_name', {
+      socket.emit('nick_name_check', {
         id: socket.id,
         nickName: nickName,
         color: color,
@@ -59,11 +59,6 @@ export default function PopupNickName() {
         people: room.people,
         password: '',
       })
-      // setRoom({
-      //   name: '',
-      //   people: 0,
-      //   count: 0,
-      // })
     }
     setNickName('')
   }

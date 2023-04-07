@@ -7,20 +7,33 @@ import ListItems from '../components/common/ListItems'
 import ListItem from '../components/common/ListItem'
 import RankCircle from '../components/room/RankCircle'
 import PlayerItemInfo from '../components/room/PlayerItemInfo'
-import { useNavigate } from 'react-router-dom'
+import { useLocation, useNavigate } from 'react-router-dom'
 
+const win: Window = window
 const myInfoDefault: PlayerInfo = { id: '', nickName: '', color: '#FFFFFF' }
 export default function Room() {
-  const navigate = useNavigate()
   const [myInfo, setMyInfo] = useState<PlayerInfo>(myInfoDefault)
   const [othersInfo, setOthersInfo] = useState<PlayerInfo[]>([])
 
+  const navigate = useNavigate()
+  const location = useLocation()
+
+  const [isNavigatingBack, setIsNavigatingBack] = useState(false)
+
   useEffect(() => {
-    const handleBeforeUnload = () => {
-      console.log('handleBeforeUnload가 뭔데ㅔㅔㅔㅔㅔ')
-      socket.emit('user_leaving')
+    const onBeforeUnload = () => {
+      navigate(location.pathname, { replace: true })
     }
-    window.addEventListener('beforeunload', handleBeforeUnload)
+    window.addEventListener('beforeunload', onBeforeUnload)
+    return () => {
+      window.removeEventListener('beforeunload', onBeforeUnload)
+    }
+  }, [navigate, location.pathname])
+
+  useEffect(() => {
+    if (!socket.id) {
+      win.location = '/'
+    }
 
     socket.listen('room_enter', (room: RoomInfo, list: PlayerInfo[]) => {
       console.log(`${socket.id}가 방 '${room.name}'에 입장했습니다.`)
@@ -29,14 +42,24 @@ export default function Room() {
       setOthersInfo(list.filter((player) => player.id !== socket.id))
     })
 
+    socket.listen('room_update', (list: PlayerInfo[]) => {
+      setOthersInfo(list.filter((player) => player.id !== socket.id))
+    })
+
+    const onPopState = () => {
+      setIsNavigatingBack(true)
+    }
+    win.addEventListener('popstate', onPopState)
     return () => {
-      window.removeEventListener('beforeunload', handleBeforeUnload)
+      win.removeEventListener('popstate', onPopState)
     }
   }, [])
-  socket.on('disconnect', () => {
-    console.log('흠..... 왜 안되지..?')
-    navigate('/')
-  })
+
+  useEffect(() => {
+    if (isNavigatingBack) {
+      win.location.reload()
+    }
+  }, [isNavigatingBack])
 
   return (
     <Wrapper>
