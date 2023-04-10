@@ -1,8 +1,0 @@
-yarn run v1.22.19
-$ npx tsc
-npm notice 
-npm notice New minor version of npm available! 9.3.1 -> 9.6.2
-npm notice Changelog: <https://github.com/npm/cli/releases/tag/v9.6.2>
-npm notice Run `npm install -g npm@9.6.2` to update!
-npm notice 
-Done in 2.45s.
