@@ -47,5 +47,6 @@ socket.io/
 !src/
 !public/
 
+apps/*/.turbo
 client/.turbo
 server/.turbo
