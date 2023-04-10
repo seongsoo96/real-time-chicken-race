@@ -8,6 +8,8 @@ import ListItem from '../components/common/ListItem'
 import RankCircle from '../components/room/RankCircle'
 import PlayerItemInfo from '../components/room/PlayerItemInfo'
 import { useLocation, useNavigate } from 'react-router-dom'
+import Game from '../components/game/Game'
+import Controller from '../components/game/Controller'
 
 const win: Window = window
 const myInfoDefault: PlayerInfo = { id: '', nickName: '', color: '#FFFFFF' }
@@ -63,29 +65,25 @@ export default function Room() {
 
   return (
     <Wrapper>
-      <Box
-        h="210px"
-        bg="white"
-        px="6"
-        pt="14"
-        bgImg="/images/room/bgSky.png"
-        bgSize="cover"
-      ></Box>
-      <ListItems>
-        <ListItem
-          option={{ color: myInfo.color, src: '/images/room/chicken.png' }}
-          info={<PlayerItemInfo info={myInfo} />}
-          rightBox={<RankCircle imgName="badgeBlue" />}
-        />
-        {othersInfo.map((player, idx) => (
+      <Game />
+      <Box h="calc(100vh - 313px);">
+        <ListItems>
           <ListItem
-            key={idx}
-            option={{ color: player.color, src: '/images/room/chicken.png' }}
-            info={<PlayerItemInfo info={player} />}
-            rightBox={<RankCircle imgName="badgeRed" />}
+            option={{ color: myInfo.color, src: '/images/room/chicken.png' }}
+            info={<PlayerItemInfo info={myInfo} />}
+            rightBox={<RankCircle imgName="badgeBlue" />}
           />
-        ))}
-      </ListItems>
+          {othersInfo.map((player, idx) => (
+            <ListItem
+              key={idx}
+              option={{ color: player.color, src: '/images/room/chicken.png' }}
+              info={<PlayerItemInfo info={player} />}
+              rightBox={<RankCircle imgName="badgeRed" />}
+            />
+          ))}
+        </ListItems>
+      </Box>
+      <Controller />
     </Wrapper>
   )
 }

@@ -10,6 +10,7 @@ export default function Wrapper({ children }: any) {
       mx="auto"
       display="flex"
       flexDir="column"
+      pos="relative"
     >
       {children}
     </Box>

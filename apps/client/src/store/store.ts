@@ -67,3 +67,13 @@ export const useFormStateStore = create<FormStateStore>()((set) => ({
   formState: defaultFormState,
   setFormState: (formState) => set(() => ({ formState })),
 }))
+
+type JumpStateStore = {
+  jumpState: boolean
+  setJumpState: (state: boolean) => void
+}
+
+export const useJumpStateStore = create<JumpStateStore>()((set) => ({
+  jumpState: false,
+  setJumpState: (state: boolean) => set({ jumpState: state }),
+}))
