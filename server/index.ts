@@ -94,9 +94,9 @@ function leaveRoom(socket) {
             (player) => player.id !== socket.id
           )
         }
-        // console.log("✅❌ socket.id ::: ", socket.id)
-        // console.log("✅❌ roomList ::: ", roomList)
-        // console.log("✅❌ roomData[roomName] ::: ", roomData[roomName])
+        console.log("✅❌ socket.id ::: ", socket.id)
+        console.log("✅❌ roomList ::: ", roomList)
+        console.log("✅❌ roomData[roomName] ::: ", roomData[roomName])
 
         io.emit("room_list", roomList)
         io.to(roomName).emit("room_update", roomData[roomName])
