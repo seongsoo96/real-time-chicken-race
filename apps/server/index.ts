@@ -137,6 +137,15 @@ function roomNew(socket: Socket, formState: FormState) {
   enterRoom(socket, roomName)
 }
 
+function sendScore(socket: Socket, score: number) {
+  const roomName = getJoinedRoomName(socket)
+
+  const player = roomData[roomName].find((player) => player.id === socket.id)
+  player.score = score
+
+  io.to(roomName).emit("send_score", roomData[roomName])
+}
+
 const port = 3001
 let roomList: RoomInfo[] = []
 let roomListWithPw: RoomInfoWithPw[] = []
@@ -230,6 +239,10 @@ io.on("connection", (socket) => {
       return
     }
     enterRoom(socket, roomName)
+  })
+
+  socket.on("score", (id: string, score: number) => {
+    sendScore(socket, score)
   })
 
   socket.on("user_leaving", () => {

@@ -11,6 +11,7 @@ export default function Wrapper({ children }: any) {
       display="flex"
       flexDir="column"
       pos="relative"
+      overflow="hidden"
     >
       {children}
     </Box>

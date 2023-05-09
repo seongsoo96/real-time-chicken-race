@@ -77,3 +77,33 @@ export const useJumpStateStore = create<JumpStateStore>()((set) => ({
   jumpState: false,
   setJumpState: (state: boolean) => set({ jumpState: state }),
 }))
+
+type startStateStore = {
+  startState: boolean
+  setStartState: (state: boolean) => void
+}
+
+export const useStartStateStore = create<startStateStore>()((set) => ({
+  startState: false,
+  setStartState: (state: boolean) => set({ startState: state }),
+}))
+
+type resultStore = {
+  result: number
+  setResult: (state: number) => void
+}
+
+export const useResultStore = create<resultStore>()((set) => ({
+  result: 0,
+  setResult: (state: number) => set({ result: state }),
+}))
+
+type scoreStore = {
+  score: number
+  setScore: (state: number) => void
+}
+
+export const useScoreStore = create<scoreStore>()((set) => ({
+  score: 0,
+  setScore: (state: number) => set({ score: state }),
+}))

@@ -1,9 +1,10 @@
 import { createBrowserRouter, RouterProvider } from 'react-router-dom'
 import GlobalLayout from './components/GlobalLayout'
-import Game from './components/game/Game'
 import MakeNewRoom from './components/trash/MakeNewRoom'
 import Room from './pages/Room'
 import WaitingRoom from './pages/WaitingRoom'
+import Hello from './components/gameddd/Hello'
+import Game from './components/game/Game'
 
 const router = createBrowserRouter([
   {
@@ -13,6 +14,10 @@ const router = createBrowserRouter([
   {
     path: '/game',
     element: <Game />,
+  },
+  {
+    path: '/hello',
+    element: <Hello />,
   },
   {
     path: '/makeNewRoom',

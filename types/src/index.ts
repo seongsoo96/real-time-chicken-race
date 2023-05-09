@@ -14,6 +14,7 @@ export type PlayerInfo = {
   id: string
   nickName: string
   color: string
+  score: number
 }
 
 export type ListItemProps = {
@@ -41,6 +42,7 @@ export type ServerToClientEvents = {
   navigate: (name: string) => void
   error: (message: SocketErrorMessage) => void
   room_update: (playerList: PlayerInfo[]) => void
+  send_score: (playerList: PlayerInfo[]) => void
 }
 
 export type ClientToServerEvents = {
@@ -53,6 +55,7 @@ export type ClientToServerEvents = {
     args: { id: string; nickName: string; color: string } & FormState
   ) => void
   user_leaving: () => void
+  score: (id: string, score: number) => void
 }
 
 export type SocketErrorMessage = {
