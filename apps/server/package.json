@@ -6,7 +6,7 @@
   "author": "seongsoo96",
   "license": "MIT",
   "scripts": {
-    "start": "ts-node ./index.ts",
+    "start": "node ./index.js",
     "build": "npx tsc",
     "dev": "nodemon --watch ./*.ts --exec \"npm start\""
   },
