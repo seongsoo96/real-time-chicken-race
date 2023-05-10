@@ -1,8 +1,9 @@
 import { ServerToClientEvents, ClientToServerEvents } from 'types'
 import { io, Socket } from 'socket.io-client'
 
-const socket: Socket<ServerToClientEvents, ClientToServerEvents> =
-  io('localhost:3001/')
+const socket: Socket<ServerToClientEvents, ClientToServerEvents> = io(
+  import.meta.env.VITE_SERVER_URL,
+)
 
 socket.listen = (
   key: keyof ServerToClientEvents,
