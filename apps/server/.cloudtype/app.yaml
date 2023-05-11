@@ -1,9 +1,16 @@
-name: node
+name: real-time-chicken-race
 app: node@18
+resources: {}
 options:
   env:
     - name: NODE_ENV
       value: production
-  install: npm ci --production
-  ports: 3001/http
-  start: npm start
+  ports: 3000
+  install: yarn
+  build: yarn build
+  start: yarn start
+context:
+  git:
+    url: https://github.com/seongsoo96/real-time-chicken-race.git
+    branch: main
+    path: apps/server

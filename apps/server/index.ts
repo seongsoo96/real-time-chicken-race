@@ -9,9 +9,9 @@ import {
 import http from "http"
 const app = require("express")()
 const server = http.createServer(app)
-const cors = require("cors")
+// const cors = require("cors")
 import { Server, Socket } from "socket.io"
-app.use(cors())
+// app.use(cors())
 const io = new Server<ClientToServerEvents, ServerToClientEvents>(server)
 
 //중복된 이름의 방이 존재할 경우 false, 없을 경우 true
