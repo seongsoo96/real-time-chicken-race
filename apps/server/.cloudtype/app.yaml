@@ -1,5 +1,5 @@
 name: node
-app: node@16
+app: node@18
 options:
   env:
     - name: NODE_ENV
