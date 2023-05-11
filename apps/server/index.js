@@ -9,7 +9,13 @@ const server = http_1.default.createServer(app);
 const cors = require("cors");
 const socket_io_1 = require("socket.io");
 app.use(cors());
-const io = new socket_io_1.Server(server);
+const io = new socket_io_1.Server(server, {
+    cors: {
+        origin: "*",
+        methods: ["GET", "POST"],
+        credentials: false,
+    },
+});
 //중복된 이름의 방이 존재할 경우 false, 없을 경우 true
 function checkDuplicateRoomName(name) {
     return io.sockets.adapter.rooms.get(name) ? false : true;
